@@ -4,6 +4,7 @@
 	<groupId>br.com.lefranchi</groupId>
 	<artifactId>eventz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>Eventz</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -37,6 +38,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Hibernate validator -->
 		<dependency>
