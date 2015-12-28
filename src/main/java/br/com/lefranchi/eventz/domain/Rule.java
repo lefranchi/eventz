@@ -64,6 +64,12 @@ public class Rule extends AbstractPersistable<Long> {
 	@OneToMany
 	private Set<Event> eventsOnFalse;
 
+	/**
+	 * Eventos que são sempre executados.
+	 */
+	@OneToMany
+	private Set<Event> eventsOnAlways;
+
 	public String getName() {
 		return name;
 	}
@@ -104,7 +110,7 @@ public class Rule extends AbstractPersistable<Long> {
 		return producer;
 	}
 
-	public void setProducer(Producer producer) {
+	public void setProducer(final Producer producer) {
 		this.producer = producer;
 	}
 
@@ -112,8 +118,17 @@ public class Rule extends AbstractPersistable<Long> {
 		this.formula = formula;
 	}
 
+	public Set<Event> getEventsOnAlways() {
+		return eventsOnAlways;
+	}
+
+	public void setEventsOnAlways(final Set<Event> eventsOnAlways) {
+		this.eventsOnAlways = eventsOnAlways;
+	}
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
 	}
+
 }
