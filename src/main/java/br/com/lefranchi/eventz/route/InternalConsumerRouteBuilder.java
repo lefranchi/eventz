@@ -52,13 +52,21 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 				final RuleEngine ruleEngine = new RuleEngine();
 
-				producer.getRules().forEach((rule) -> {
-					try {
-						ruleEngine.processRule(rule, data);
-					} catch (final Exception e) {
-						LOGGER.error(String.format("Erro na execução da regra %s do produtor %s", rule, producer), e);
-					}
-				});
+				// TODO: Resolver problemas de lazy loading.
+				if (producer.getRules() != null && producer.getRules().size() > 0) {
+
+					producer.getRules().forEach((rule) -> {
+						try {
+							ruleEngine.processRule(rule, data);
+						} catch (final Exception e) {
+							LOGGER.error(String.format("Erro na execução da regra %s do produtor %s", rule, producer),
+									e);
+						}
+					});
+
+				} else {
+					LOGGER.warn(String.format("Recebando mensagem para o produtor %s sem regras.", producer));
+				}
 
 			}
 

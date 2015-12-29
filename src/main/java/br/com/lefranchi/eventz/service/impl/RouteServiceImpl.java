@@ -1,5 +1,6 @@
 package br.com.lefranchi.eventz.service.impl;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -29,6 +30,7 @@ public class RouteServiceImpl implements RouteService {
 	CamelContext camelContext;
 
 	@Override
+	@PostConstruct
 	@Transactional(readOnly = true)
 	public void loadRoutes() {
 

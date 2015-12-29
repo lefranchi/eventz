@@ -1,5 +1,6 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,7 +33,7 @@ public class Producer extends AbstractPersistable<Long> {
 	private String name;
 
 	/**
-	 * Metdadados referentes ao tipo de dado produzido pelo Produtor.
+	 * Metadados referentes ao tipo de dado produzido pelo Produtor.
 	 */
 	@OneToOne(mappedBy = "producer", cascade = CascadeType.ALL)
 	private ProducerMetadata metadata;
@@ -69,7 +70,7 @@ public class Producer extends AbstractPersistable<Long> {
 
 	@Override
 	public String toString() {
-		return ReflectionToStringBuilder.toString(this);
+		return ReflectionToStringBuilder.toStringExclude(this, Arrays.asList("rules"));
 	}
 
 }
