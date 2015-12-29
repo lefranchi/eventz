@@ -1,8 +1,11 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -34,6 +37,12 @@ public class Producer extends AbstractPersistable<Long> {
 	@OneToOne(mappedBy = "producer", cascade = CascadeType.ALL)
 	private ProducerMetadata metadata;
 
+	/**
+	 * Executada para o produtor.
+	 */
+	@OneToMany(mappedBy = "producer")
+	private Set<Rule> rules;
+
 	public String getName() {
 		return name;
 	}
@@ -48,6 +57,14 @@ public class Producer extends AbstractPersistable<Long> {
 
 	public void setMetadata(final ProducerMetadata metadata) {
 		this.metadata = metadata;
+	}
+
+	public Set<Rule> getRules() {
+		return rules;
+	}
+
+	public void setRules(final Set<Rule> rules) {
+		this.rules = rules;
 	}
 
 	@Override

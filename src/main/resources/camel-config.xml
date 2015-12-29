@@ -8,6 +8,7 @@
 
 	<camelContext xmlns="http://camel.apache.org/schema/spring">
 
+		<!-- 	
 		<route id="timerToInRoute">
 			<from uri="timer:foo?period=1s" />
 			<transform>
@@ -21,7 +22,8 @@
 			<log message="Routing message from inbox to outbox queue with data ${body}" />
 			<to uri="activemq:queue:outbox" />
 		</route>
-
+ 		-->
+ 		
 	</camelContext>
 
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
