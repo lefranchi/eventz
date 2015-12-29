@@ -17,7 +17,7 @@ public class EventLog extends EventProcessor {
 	/**
 	 * Logger.
 	 */
-	final static Logger logger = LoggerFactory.getLogger(EventLog.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(EventLog.class);
 
 	/*
 	 * (non-Javadoc)
@@ -29,7 +29,7 @@ public class EventLog extends EventProcessor {
 	@Override
 	public void process(final ProducerData data, final Rule rule) {
 
-		logger.info(String.format("Processando evento de impressao em tela para %s", data));
+		LOGGER.info(String.format("Processando evento de impressao em tela para %s", data));
 
 	}
 

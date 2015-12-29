@@ -1,4 +1,4 @@
-package br.com.lefranchi.eventz.service;
+package br.com.lefranchi.eventz.service.impl;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 
 import br.com.lefranchi.eventz.domain.Employee;
 import br.com.lefranchi.eventz.repository.EmployeeRepository;
+import br.com.lefranchi.eventz.service.EmployeeService;
 
 @Service
 @Validated

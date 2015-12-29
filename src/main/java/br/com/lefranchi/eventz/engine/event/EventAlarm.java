@@ -20,7 +20,7 @@ public class EventAlarm extends EventProcessor {
 	/**
 	 * Logger.
 	 */
-	final static Logger logger = LoggerFactory.getLogger(EventAlarm.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(EventAlarm.class);
 
 	/*
 	 * (non-Javadoc)
@@ -32,7 +32,7 @@ public class EventAlarm extends EventProcessor {
 	@Override
 	public void process(final ProducerData data, final Rule rule) {
 
-		logger.info(String.format("Criando alarme para %s", data));
+		LOGGER.info(String.format("Criando alarme para %s", data));
 
 		final Alarm alarm = new Alarm();
 
