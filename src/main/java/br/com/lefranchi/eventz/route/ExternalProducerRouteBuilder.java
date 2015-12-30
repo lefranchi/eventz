@@ -1,5 +1,7 @@
 package br.com.lefranchi.eventz.route;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import br.com.lefranchi.eventz.domain.Producer;
@@ -11,7 +13,7 @@ import br.com.lefranchi.eventz.domain.Producer;
  * @author lfranchi
  *
  */
-public class ProducerRouteBuilder extends RouteBuilder {
+public class ExternalProducerRouteBuilder extends RouteBuilder {
 
 	/**
 	 * Produtor que será coletado.
@@ -21,7 +23,7 @@ public class ProducerRouteBuilder extends RouteBuilder {
 	/**
 	 * Construtor.
 	 */
-	public ProducerRouteBuilder(final Producer producer) {
+	public ExternalProducerRouteBuilder(final Producer producer) {
 		super();
 		this.producer = producer;
 	}
@@ -36,7 +38,14 @@ public class ProducerRouteBuilder extends RouteBuilder {
 
 		// TODO: A forma de coletar a inforação externa deve ser definida no
 		// Producer. Definir o nome da fila de destino para o nome do produtor.
-		from("").process("producerProcessor").to("activemq:queue:" + getProducer().getName().trim());
+		from("").process(new Processor() {
+
+			@Override
+			public void process(final Exchange exchange) throws Exception {
+				// TODO Auto-generated method stub
+
+			}
+		}).to("activemq:queue:" + getProducer().getName().trim());
 
 	}
 
