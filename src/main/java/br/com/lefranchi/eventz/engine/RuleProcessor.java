@@ -2,27 +2,28 @@ package br.com.lefranchi.eventz.engine;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import br.com.lefranchi.eventz.domain.Event;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.domain.ProducerDataType;
 import br.com.lefranchi.eventz.domain.Rule;
-import br.com.lefranchi.eventz.engine.event.EventProcessor;
 import br.com.lefranchi.eventz.util.DelimitedUtils;
 import br.com.lefranchi.eventz.util.JsonUtils;
 
-public class RuleEngine {
+@Component
+public class RuleProcessor implements Processor {
 
-	final static Logger LOGGER = LoggerFactory.getLogger(RuleEngine.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(RuleProcessor.class);
 
 	private static final JexlEngine jexl = new JexlEngine();
 
@@ -32,7 +33,25 @@ public class RuleEngine {
 		jexl.setSilent(false);
 	}
 
-	public void processRule(final Rule rule, final ProducerData data) throws Exception {
+	private Boolean executeJEXL(final Rule rule, final Map<String, Object> mapValues) {
+		Boolean retValue;
+		LOGGER.debug("Iniciando execução de JEXL");
+
+		final Expression e = jexl.createExpression(rule.getFormula());
+		final JexlContext context = new MapContext();
+		for (final String key : mapValues.keySet()) {
+			context.set(key, mapValues.get(key));
+		}
+		retValue = (Boolean) e.evaluate(context);
+		return retValue;
+	}
+
+	@Override
+	public void process(final Exchange exchange) throws Exception {
+
+		final RuleProcessorVO processorVO = exchange.getIn().getBody(RuleProcessorVO.class);
+		final Rule rule = processorVO.getRule();
+		final ProducerData data = processorVO.getData();
 
 		Boolean retValue = true;
 
@@ -72,46 +91,7 @@ public class RuleEngine {
 		LOGGER.debug(String.format("[%s:%d] Regra processada com resultado igual a %b", rule.getName(), rule.getId(),
 				retValue));
 
-		LOGGER.debug(String.format("[%s:%d] Inicio de eventos %s. Total de %d eventos.", rule.getName(), rule.getId(),
-				(retValue ? "positivas" : "negativas"), rule.getEventsOnTrue().size()));
-
-		executeEvent(rule, data, (retValue ? rule.getEventsOnTrue() : rule.getEventsOnFalse()));
-
-		LOGGER.debug(String.format("[%s:%d] Inicio de eventos Always. Total de %d eventos.", rule.getName(),
-				rule.getId(), rule.getEventsOnAlways().size()));
-
-		executeEvent(rule, data, rule.getEventsOnAlways());
-
-	}
-
-	private Boolean executeJEXL(final Rule rule, final Map<String, Object> mapValues) {
-		Boolean retValue;
-		LOGGER.debug("Iniciando execução de JEXL");
-
-		final Expression e = jexl.createExpression(rule.getFormula());
-		final JexlContext context = new MapContext();
-		for (final String key : mapValues.keySet()) {
-			context.set(key, mapValues.get(key));
-		}
-		retValue = (Boolean) e.evaluate(context);
-		return retValue;
-	}
-
-	private void executeEvent(final Rule rule, final ProducerData data, final Set<Event> events)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-		for (final Event event : events) {
-
-			LOGGER.debug(String.format("[%s:%d] Inicio de execução do evento %s:%d", rule.getName(), rule.getId(),
-					event.getName(), event.getId()));
-
-			final EventProcessor processor = (EventProcessor) Class.forName(event.getProcessor()).newInstance();
-			processor.process(data, rule);
-
-			LOGGER.debug(String.format("[%s:%d] Evento %s:%d processado", rule.getName(), rule.getId(), event.getName(),
-					event.getId()));
-
-		}
+		processorVO.setResult(retValue);
 
 	}
 }

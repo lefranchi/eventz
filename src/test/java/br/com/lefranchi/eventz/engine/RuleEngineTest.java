@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.builder.ExchangeBuilder;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -20,6 +24,9 @@ import br.com.lefranchi.eventz.domain.ProducerMetadata;
 import br.com.lefranchi.eventz.domain.Rule;
 
 public class RuleEngineTest {
+
+	@Autowired
+	CamelContext camelContext;
 
 	@Test
 	public void rules() {
@@ -83,10 +90,16 @@ public class RuleEngineTest {
 
 		rule.setEventsOnFalse(eventsOnFalse);
 
-		final RuleEngine ruleEngine = new RuleEngine();
+		final RuleProcessor ruleProcessor = new RuleProcessor();
+
+		final Exchange exchange = ExchangeBuilder.anExchange(camelContext).build();
+		final RuleProcessorVO processorVO = new RuleProcessorVO();
+		processorVO.setRule(rule);
+		processorVO.setData(data);
+		exchange.getIn().setBody(processorVO);
 
 		try {
-			ruleEngine.processRule(rule, data);
+			ruleProcessor.process(exchange);
 		} catch (final ClassNotFoundException e) {
 			e.printStackTrace();
 			assert false;

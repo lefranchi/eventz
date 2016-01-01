@@ -2,12 +2,16 @@ package br.com.lefranchi.eventz.engine.event;
 
 import java.util.Calendar;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import br.com.lefranchi.eventz.domain.Alarm;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.domain.Rule;
+import br.com.lefranchi.eventz.engine.RuleProcessorVO;
 
 /**
  * Cria alarme e salva no banco de dados.
@@ -15,22 +19,21 @@ import br.com.lefranchi.eventz.domain.Rule;
  * @author lfranchi
  *
  */
-public class EventAlarm extends EventProcessor {
+@Component
+public class EventAlarm implements Processor {
+
+	// TODO: CRIAR TESTCASE
 
 	/**
 	 * Logger.
 	 */
 	final static Logger LOGGER = LoggerFactory.getLogger(EventAlarm.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * br.com.lefranchi.events.core.processor.EventProcessor#process(br.com.
-	 * lefranchi.events.core.model.ProducerData)
-	 */
 	@Override
-	public void process(final ProducerData data, final Rule rule) {
+	public void process(final Exchange exchange) throws Exception {
+
+		final ProducerData data = exchange.getIn().getBody(RuleProcessorVO.class).getData();
+		final Rule rule = exchange.getIn().getBody(RuleProcessorVO.class).getRule();
 
 		LOGGER.info(String.format("Criando alarme para %s", data));
 
