@@ -3,9 +3,11 @@ package br.com.lefranchi.eventz.route;
 import java.util.Set;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.Predicate;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,24 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 	public void configure() throws Exception {
 
 		final String queueName = getProducer().getName().replaceAll("\\s+", "");
+
+		errorHandler(loggingErrorHandler("internal.consumer").level(LoggingLevel.ERROR));
+
+		if (producer.getEventsOnException() != null && producer.getEventsOnException().size() > 0) {
+
+			final OnExceptionDefinition exceptionDefinition = onException(RuntimeException.class);
+
+			if (producer.getEventsOnException().size() > 1)
+				exceptionDefinition.multicast().parallelProcessing();
+
+			producer.getEventsOnException().forEach((event) -> {
+				exceptionDefinition.process(event.getProcessor());
+			});
+
+			if (producer.getEventsOnException().size() > 1)
+				exceptionDefinition.end();
+
+		}
 
 		final RouteDefinition routeDefinition = from("activemq:" + queueName)
 

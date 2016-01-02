@@ -33,7 +33,7 @@ public class RuleProcessor implements Processor {
 		jexl.setSilent(false);
 	}
 
-	private Boolean executeJEXL(final Rule rule, final Map<String, Object> mapValues) {
+	private Boolean executeJEXL(final Rule rule, final Map<String, Object> mapValues) throws Exception {
 		Boolean retValue;
 		LOGGER.debug("Iniciando execução de JEXL");
 
@@ -67,7 +67,7 @@ public class RuleProcessor implements Processor {
 			mapValues = JsonUtils.jsonToMap(data.getData());
 		} else if (data.getProducer().getMetadata().getDataType().equals(ProducerDataType.XML)) {
 			// TODO: Implementar processamento de regras para xml
-			LOGGER.error("Erro extraindo variaveus do tipo XML.");
+			LOGGER.error("Erro extraindo variaveis do tipo XML.");
 			throw new Exception("Tipo de execução de regra não implementada.");
 		}
 

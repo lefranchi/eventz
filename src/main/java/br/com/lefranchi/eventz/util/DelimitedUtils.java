@@ -22,7 +22,27 @@ public class DelimitedUtils {
 
 		for (final DataFieldMetadata dataFieldMetadata : fields) {
 
-			mapValues.put(dataFieldMetadata.getName(), fieldValues[i++]);
+			final String vl = fieldValues[i++];
+
+			Object o = null;
+
+			switch (dataFieldMetadata.getType()) {
+			case NUMBER:
+				try {
+					o = Float.valueOf(vl);
+				} catch (final NumberFormatException e) {
+					o = Long.valueOf(vl);
+				}
+				break;
+
+			case BOOLEAN:
+				o = Boolean.valueOf(vl);
+
+			default:
+				o = vl;
+			}
+
+			mapValues.put(dataFieldMetadata.getName(), o);
 
 		}
 

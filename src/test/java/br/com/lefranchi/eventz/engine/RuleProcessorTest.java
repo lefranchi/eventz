@@ -51,6 +51,14 @@ public class RuleProcessorTest {
 
 		producer = ProducerTestUtils.newProducer();
 
+		// Eventos para erro de execução de rota.
+		final Set<Event> eventsOnException = new HashSet<>();
+		final Event e0 = new Event();
+		e0.setName("Evento 0");
+		e0.setProcessor("eventLog");
+		eventsOnException.add(e0);
+		producer.setEventsOnException(eventsOnException);
+
 		// A regra que vai ser aplicada para este produtor.
 		Rule rule = new Rule();
 		rule.setName("Regra1");
@@ -87,7 +95,7 @@ public class RuleProcessorTest {
 	}
 
 	@Test
-	public void rules() {
+	public void basicRuleTest() {
 
 		try {
 			routeService.loadRoute(producer);
@@ -99,15 +107,28 @@ public class RuleProcessorTest {
 
 		producerTemplate.sendBody(ProducerTestUtils.PRODUCER_SAMPLE_DATA);
 
-		// TODO : TESTAR TIPO DE DADOS NO PARSE DO VALOR RECEBIDO.
+	}
+
+	@Test
+	public void parseErrorRuleTest() {
+
+		try {
+			routeService.loadRoute(producer);
+		} catch (final Exception e) {
+			assert false;
+			e.printStackTrace();
+			return;
+		}
+
+		producerTemplate.sendBody(ProducerTestUtils.PRODUCER_SAMPLE_DATA.substring(0, 10));
+
+		// TODO: CONFIGURAR PARA GERAR ALARME E TESTAR SE ELE FOI GERADO.
 
 		// TODO: TESTAR FORMATO INVALIDO.
 
 		// TODO : TESTAR MENSAGEM COM MENOS PARAMETROS.
 
 		// TODO: TESTAR PARAMETROS NA REGRA INVALIDOS.
-
-		// TODO: TESTAR EVENTOS EM NOVO TESTE - MONTAR UM PARA CADA EVENTO.
 
 	}
 
