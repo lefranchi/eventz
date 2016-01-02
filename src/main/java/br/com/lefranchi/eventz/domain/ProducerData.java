@@ -1,9 +1,15 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -36,6 +42,15 @@ public class ProducerData extends AbstractPersistable<Long> {
 	@Column(nullable = false)
 	private String data;
 
+	/**
+	 * Variaveis e valores extraidos.
+	 */
+	@ElementCollection
+	@MapKeyColumn(name = "key")
+	@Column(name = "value")
+	@CollectionTable(name = "dataValues", joinColumns = @JoinColumn(name = "producer_data_id") )
+	private Map<String, String> dataValues = new HashMap<String, String>();
+
 	public Producer getProducer() {
 		return producer;
 	}
@@ -52,8 +67,17 @@ public class ProducerData extends AbstractPersistable<Long> {
 		this.data = data;
 	}
 
+	public Map<String, String> getDataValues() {
+		return dataValues;
+	}
+
+	public void setDataValues(final Map<String, String> dataValues) {
+		this.dataValues = dataValues;
+	}
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
 	}
+
 }

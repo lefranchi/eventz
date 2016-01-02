@@ -2,16 +2,34 @@ package br.com.lefranchi.eventz.engine.event;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import br.com.lefranchi.eventz.domain.ProducerData;
+import br.com.lefranchi.eventz.engine.RuleProcessorVO;
+import br.com.lefranchi.eventz.repository.ProducerDataRepository;
 
 @Component
 public class EventSaveData implements Processor {
 
-	// TODO: CRIAR TESTCASE
+	/**
+	 * Logger.
+	 */
+	final static Logger LOGGER = LoggerFactory.getLogger(EventSaveData.class);
+
+	@Autowired
+	ProducerDataRepository producerDataReporitory;
 
 	@Override
 	public void process(final Exchange exchange) throws Exception {
-		// TODO IMPLEMENTAR SALVAMENTO DOS DADOS.
+
+		final ProducerData data = exchange.getIn().getBody(RuleProcessorVO.class).getData();
+
+		producerDataReporitory.save(data);
+
+		LOGGER.debug(String.format("Dados %s do produtor %s salvos.", data, data.getProducer()));
 
 	}
 

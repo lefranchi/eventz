@@ -60,23 +60,28 @@ public class RuleProcessor implements Processor {
 
 		LOGGER.debug(String.format("[%s:%d] Extraindo variaveis...", rule.getName(), rule.getId()));
 
-		Map<String, Object> mapValues = new HashMap<>();
+		Map<String, Object> dataValues = new HashMap<>();
 		if (data.getProducer().getMetadata().getDataType().equals(ProducerDataType.DELIMITED)) {
-			mapValues = DelimitedUtils.delimitedToMap(data.getData(), data.getProducer().getMetadata().getFields());
+			dataValues = DelimitedUtils.delimitedToMap(data.getData(), data.getProducer().getMetadata().getFields());
 		} else if (data.getProducer().getMetadata().getDataType().equals(ProducerDataType.JSON)) {
-			mapValues = JsonUtils.jsonToMap(data.getData());
+			dataValues = JsonUtils.jsonToMap(data.getData());
 		} else if (data.getProducer().getMetadata().getDataType().equals(ProducerDataType.XML)) {
 			// TODO: Implementar processamento de regras para xml
 			LOGGER.error("Erro extraindo variaveis do tipo XML.");
 			throw new Exception("Tipo de execução de regra não implementada.");
 		}
 
-		LOGGER.debug(String.format("[%s:%d] Variaveis Extraidas: %s", rule.getName(), rule.getId(), mapValues));
+		LOGGER.debug(String.format("[%s:%d] Variaveis Extraidas: %s", rule.getName(), rule.getId(), dataValues));
+
+		dataValues.forEach((key, value) -> {
+			data.setDataValues(new HashMap<>());
+			data.getDataValues().put(key, String.valueOf(value));
+		});
 
 		LOGGER.debug(String.format("[%s:%d] Inicio de processamento da regra...", rule.getName(), rule.getId()));
 
 		if (rule.getType().equals(FormulaType.JEXL)) {
-			retValue = executeJEXL(rule, mapValues);
+			retValue = executeJEXL(rule, dataValues);
 		} else if (rule.getType().equals(FormulaType.EL)) {
 			// TODO: Implementar processamento de regras para expression
 			// language
