@@ -23,6 +23,7 @@ import br.com.lefranchi.eventz.engine.RuleProcessorVO;
  */
 public class InternalConsumerRouteBuilder extends RouteBuilder {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalConsumerRouteBuilder.class);
 
 	/**
@@ -46,7 +47,9 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 	@Override
 	public void configure() throws Exception {
 
-		final RouteDefinition routeDefinition = from("activemq:queue:" + getProducer().getName().trim())
+		final String queueName = getProducer().getName().replaceAll("\\s+", "");
+
+		final RouteDefinition routeDefinition = from("activemq:" + queueName)
 
 				.process(new Processor() {
 

@@ -1,73 +1,58 @@
 package br.com.lefranchi.eventz.engine;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.ExchangeBuilder;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.ProducerTemplate;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import br.com.lefranchi.eventz.domain.DataFieldMetadata;
+import br.com.lefranchi.eventz.Application;
 import br.com.lefranchi.eventz.domain.Event;
-import br.com.lefranchi.eventz.domain.FieldDataType;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.Producer;
-import br.com.lefranchi.eventz.domain.ProducerData;
-import br.com.lefranchi.eventz.domain.ProducerDataType;
-import br.com.lefranchi.eventz.domain.ProducerMetadata;
 import br.com.lefranchi.eventz.domain.Rule;
+import br.com.lefranchi.eventz.repository.ProducerRepository;
+import br.com.lefranchi.eventz.repository.RuleRepository;
+import br.com.lefranchi.eventz.service.RouteService;
+import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@ContextConfiguration(classes = Application.class)
 public class RuleEngineTest {
 
 	@Autowired
 	CamelContext camelContext;
 
-	@Test
-	public void rules() {
+	@EndpointInject(uri = "activemq:Producer-01")
+	ProducerTemplate producerTemplate;
 
-		// Quem produz o dado.
-		final Producer producer = new Producer();
-		producer.setName("Bomba1");
+	@Autowired
+	ProducerRepository producerRepository;
+	Producer producer;
 
-		// Metadados do Produtor.
-		final ProducerMetadata producerMetadata = new ProducerMetadata();
-		producerMetadata.setProducer(producer);
-		producerMetadata.setDataType(ProducerDataType.DELIMITED);
-		producerMetadata.setSampleData("88745;LEANDRO FRANCHI;1979;1.25");
+	@Autowired
+	RuleRepository ruleRepository;
 
-		producerMetadata.setFields(new LinkedHashSet<>());
+	@Autowired
+	RouteService routeService;
 
-		final DataFieldMetadata dataFieldMetadataID = new DataFieldMetadata();
-		dataFieldMetadataID.setName("ID");
-		dataFieldMetadataID.setType(FieldDataType.NUMBER);
-		producerMetadata.getFields().add(dataFieldMetadataID);
+	@Before
+	public void setUp() {
 
-		final DataFieldMetadata dataFieldMetadataNOME = new DataFieldMetadata();
-		dataFieldMetadataNOME.setName("NOME");
-		dataFieldMetadataNOME.setType(FieldDataType.STRING);
-		producerMetadata.getFields().add(dataFieldMetadataNOME);
-
-		final DataFieldMetadata dataFieldMetadataANO = new DataFieldMetadata();
-		dataFieldMetadataANO.setName("ANO");
-		dataFieldMetadataANO.setType(FieldDataType.NUMBER);
-		producerMetadata.getFields().add(dataFieldMetadataANO);
-
-		producer.setMetadata(producerMetadata);
-
-		// O proprio dado proveniente do Produtor.
-		final ProducerData data = new ProducerData();
-		data.setProducer(producer);
-		// data.setData("{\"name\":\"jose\", \"idade\":\"37\"}");
-		data.setData("25;PEDRO FRANCHI;2008;1.85");
+		producer = ProducerTestUtils.newProducer();
 
 		// A regra que vai ser aplicada para este produtor.
-		final Rule rule = new Rule();
+		Rule rule = new Rule();
 		rule.setName("Regra1");
 		rule.setProducer(producer);
 		rule.setType(FormulaType.JEXL);
@@ -77,7 +62,7 @@ public class RuleEngineTest {
 		final Set<Event> eventsOnTrue = new HashSet<Event>();
 		final Event e1 = new Event();
 		e1.setName("Evento 1");
-		e1.setProcessor("br.com.lefranchi.events.event.log.EventLog");
+		e1.setProcessor("eventLog");
 		eventsOnTrue.add(e1);
 
 		rule.setEventsOnTrue(eventsOnTrue);
@@ -85,40 +70,46 @@ public class RuleEngineTest {
 		final Set<Event> eventsOnFalse = new HashSet<Event>();
 		final Event e2 = new Event();
 		e2.setName("Evento Alarm");
-		e2.setProcessor("br.com.lefranchi.events.event.alarm.EventAlarm");
+		e2.setProcessor("eventAlarm");
 		eventsOnFalse.add(e2);
 
 		rule.setEventsOnFalse(eventsOnFalse);
 
-		final RuleProcessor ruleProcessor = new RuleProcessor();
+		producer.setRules(new LinkedHashSet<>());
+		producer.getRules().add(rule);
 
-		final Exchange exchange = ExchangeBuilder.anExchange(camelContext).build();
-		final RuleProcessorVO processorVO = new RuleProcessorVO();
-		processorVO.setRule(rule);
-		processorVO.setData(data);
-		exchange.getIn().setBody(processorVO);
+		rule.setProducer(producer);
 
-		try {
-			ruleProcessor.process(exchange);
-		} catch (final ClassNotFoundException e) {
-			e.printStackTrace();
-			assert false;
-		} catch (final InstantiationException e) {
-			e.printStackTrace();
-			assert false;
-		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
-			assert false;
-		} catch (final JsonProcessingException e) {
-			e.printStackTrace();
-			assert false;
-		} catch (final IOException e) {
-			e.printStackTrace();
-			assert false;
-		} catch (final Exception e) {
-			e.printStackTrace();
-			assert false;
-		}
+		producer = producerRepository.save(producer);
+
+		rule = ruleRepository.save(rule);
+
+	}
+
+	@Test
+	public void rules() {
+
+		routeService.loadRoute(producer);
+
+		producerTemplate.sendBody("25;PEDRO FRANCHI;2008;1.85");
+
+		// http://camel.apache.org/spring-testing.html
+		// final RuleProcessor ruleProcessor = new RuleProcessor();
+		//
+		// final Exchange exchange =
+		// ExchangeBuilder.anExchange(camelContext).build();
+		// final RuleProcessorVO processorVO = new RuleProcessorVO();
+		// processorVO.setRule(rule);
+		// processorVO.setData(data);
+		// exchange.getIn().setBody(processorVO);
+		//
+
+		// try {
+		// ruleProcessor.process(exchange);
+		// } catch (final Exception e) {
+		// assert false;
+		// e.printStackTrace();
+		// }
 
 	}
 
