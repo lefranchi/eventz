@@ -71,7 +71,8 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		if (producer.getRules() != null && producer.getRules().size() > 0) {
 
-			routeDefinition.multicast().parallelProcessing();
+			if (producer.getRules().size() > 1)
+				routeDefinition.multicast().parallelProcessing();
 
 			producer.getRules().forEach((rule) -> {
 
@@ -106,24 +107,31 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 			});
 
-			routeDefinition.end();
+			if (producer.getRules().size() > 1)
+				routeDefinition.end();
 
 		}
+
+		routeDefinition.to("log:Execucao de rota finalizada.");
 
 	}
 
 	private void processEvents(final RouteDefinition routeDefinition, final Set<Event> events) {
 
+		if (events == null)
+			return;
+
 		if (events.size() > 0) {
 
-			routeDefinition.multicast().parallelProcessing();
+			if (events.size() > 1)
+				routeDefinition.multicast().parallelProcessing();
 
 			events.forEach((event) -> {
-				// TODO: O NOME DO PROCESSADOR DEVE ESTAR CONFIGURADO
 				routeDefinition.process(event.getProcessor());
 			});
 
-			routeDefinition.end();
+			if (events.size() > 1)
+				routeDefinition.end();
 
 		}
 

@@ -36,23 +36,25 @@ public class RouteServiceImpl implements RouteService {
 
 		LOGGER.debug("Carregando Rotas...");
 
-		producerService.findAll().forEach((producer) -> loadRoute(producer));
+		producerService.findAll().forEach((producer) -> {
+			try {
+				loadRoute(producer);
+			} catch (final Exception e) {
+				LOGGER.error(String.format("Erro na carga da rota para o produtor %s", producer), e);
+			}
+		});
 
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void loadRoute(@NotNull @Valid final Producer producer) {
+	public void loadRoute(@NotNull @Valid final Producer producer) throws Exception {
 
 		LOGGER.info(String.format("Carregando rota para %s", producer));
 
 		final InternalConsumerRouteBuilder internalConsumerRouteBuilder = new InternalConsumerRouteBuilder(producer);
 
-		try {
-			camelContext.addRoutes(internalConsumerRouteBuilder);
-		} catch (final Exception e) {
-			LOGGER.error(String.format("Erro na adição de rota para produtor %s", producer), e);
-		}
+		camelContext.addRoutes(internalConsumerRouteBuilder);
 
 	}
 

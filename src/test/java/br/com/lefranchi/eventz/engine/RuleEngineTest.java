@@ -89,9 +89,15 @@ public class RuleEngineTest {
 	@Test
 	public void rules() {
 
-		routeService.loadRoute(producer);
+		try {
+			routeService.loadRoute(producer);
+		} catch (final Exception e) {
+			assert false;
+			e.printStackTrace();
+			return;
+		}
 
-		producerTemplate.sendBody("25;PEDRO FRANCHI;2008;1.85");
+		producerTemplate.sendBody(ProducerTestUtils.PRODUCER_SAMPLE_DATA);
 
 		// http://camel.apache.org/spring-testing.html
 		// final RuleProcessor ruleProcessor = new RuleProcessor();

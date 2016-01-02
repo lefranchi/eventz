@@ -6,6 +6,6 @@ public interface RouteService {
 
 	public void loadRoutes();
 
-	void loadRoute(final Producer producer);
+	void loadRoute(final Producer producer) throws Exception;
 
 }
