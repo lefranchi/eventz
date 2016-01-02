@@ -28,7 +28,7 @@ import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ContextConfiguration(classes = Application.class)
-public class RuleEngineTest {
+public class RuleProcessorTest {
 
 	@Autowired
 	CamelContext camelContext;
@@ -56,7 +56,7 @@ public class RuleEngineTest {
 		rule.setName("Regra1");
 		rule.setProducer(producer);
 		rule.setType(FormulaType.JEXL);
-		rule.setFormula("ANO > 2010");
+		rule.setFormula("content > 4");
 
 		// Eventos processados para retorno verdadeiro.
 		final Set<Event> eventsOnTrue = new HashSet<Event>();
@@ -99,23 +99,15 @@ public class RuleEngineTest {
 
 		producerTemplate.sendBody(ProducerTestUtils.PRODUCER_SAMPLE_DATA);
 
-		// http://camel.apache.org/spring-testing.html
-		// final RuleProcessor ruleProcessor = new RuleProcessor();
-		//
-		// final Exchange exchange =
-		// ExchangeBuilder.anExchange(camelContext).build();
-		// final RuleProcessorVO processorVO = new RuleProcessorVO();
-		// processorVO.setRule(rule);
-		// processorVO.setData(data);
-		// exchange.getIn().setBody(processorVO);
-		//
+		// TODO : TESTAR TIPO DE DADOS NO PARSE DO VALOR RECEBIDO.
 
-		// try {
-		// ruleProcessor.process(exchange);
-		// } catch (final Exception e) {
-		// assert false;
-		// e.printStackTrace();
-		// }
+		// TODO: TESTAR FORMATO INVALIDO.
+
+		// TODO : TESTAR MENSAGEM COM MENOS PARAMETROS.
+
+		// TODO: TESTAR PARAMETROS NA REGRA INVALIDOS.
+
+		// TODO: TESTAR EVENTOS EM NOVO TESTE - MONTAR UM PARA CADA EVENTO.
 
 	}
 

@@ -11,7 +11,7 @@ import br.com.lefranchi.eventz.domain.ProducerMetadata;
 public class ProducerTestUtils {
 
 	public final static String PRODUCER_NAME = "Producer - 01";
-	public final static String PRODUCER_SAMPLE_DATA = "88745;LEANDRO FRANCHI;1979;0;25.4";
+	public final static String PRODUCER_SAMPLE_DATA = "88745;LEANDRO FRANCHI;1979;0;25.4;3";
 
 	public static Producer newProducer() {
 
