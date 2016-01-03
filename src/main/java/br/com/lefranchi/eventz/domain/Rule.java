@@ -56,19 +56,19 @@ public class Rule extends AbstractPersistable<Long> {
 	 * verdadeiro.
 	 */
 	@OneToMany
-	private Set<Event> eventsOnTrue;
+	private Set<EventToProcess> eventsOnTrue;
 
 	/**
 	 * Eventos que serão executados quando o resultados da formula for falso.
 	 */
 	@OneToMany
-	private Set<Event> eventsOnFalse;
+	private Set<EventToProcess> eventsOnFalse;
 
 	/**
 	 * Eventos que são sempre executados.
 	 */
 	@OneToMany
-	private Set<Event> eventsOnAlways;
+	private Set<EventToProcess> eventsOnAlways;
 
 	public String getName() {
 		return name;
@@ -78,19 +78,19 @@ public class Rule extends AbstractPersistable<Long> {
 		this.name = name;
 	}
 
-	public Set<Event> getEventsOnTrue() {
+	public Set<EventToProcess> getEventsOnTrue() {
 		return eventsOnTrue;
 	}
 
-	public void setEventsOnTrue(final Set<Event> eventsOnTrue) {
+	public void setEventsOnTrue(final Set<EventToProcess> eventsOnTrue) {
 		this.eventsOnTrue = eventsOnTrue;
 	}
 
-	public Set<Event> getEventsOnFalse() {
+	public Set<EventToProcess> getEventsOnFalse() {
 		return eventsOnFalse;
 	}
 
-	public void setEventsOnFalse(final Set<Event> eventsOnFalse) {
+	public void setEventsOnFalse(final Set<EventToProcess> eventsOnFalse) {
 		this.eventsOnFalse = eventsOnFalse;
 	}
 
@@ -118,11 +118,11 @@ public class Rule extends AbstractPersistable<Long> {
 		this.formula = formula;
 	}
 
-	public Set<Event> getEventsOnAlways() {
+	public Set<EventToProcess> getEventsOnAlways() {
 		return eventsOnAlways;
 	}
 
-	public void setEventsOnAlways(final Set<Event> eventsOnAlways) {
+	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
 	}
 

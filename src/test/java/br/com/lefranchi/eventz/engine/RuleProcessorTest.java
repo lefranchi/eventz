@@ -2,7 +2,6 @@ package br.com.lefranchi.eventz.engine;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
@@ -17,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.lefranchi.eventz.Application;
 import br.com.lefranchi.eventz.domain.Event;
+import br.com.lefranchi.eventz.domain.EventProperty;
+import br.com.lefranchi.eventz.domain.EventPropertyType;
+import br.com.lefranchi.eventz.domain.EventToProcess;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.Rule;
@@ -52,12 +54,13 @@ public class RuleProcessorTest {
 		producer = ProducerTestUtils.newProducer();
 
 		// Eventos para erro de execução de rota.
-		final Set<Event> eventsOnException = new HashSet<>();
+		producer.setEventsOnException(new HashSet<>());
 		final Event e0 = new Event();
 		e0.setName("Evento 0");
 		e0.setProcessor("eventLog");
-		eventsOnException.add(e0);
-		producer.setEventsOnException(eventsOnException);
+		final EventToProcess eventToProcess0 = new EventToProcess();
+		eventToProcess0.setEvent(e0);
+		producer.getEventsOnException().add(eventToProcess0);
 
 		// A regra que vai ser aplicada para este produtor.
 		Rule rule = new Rule();
@@ -67,21 +70,28 @@ public class RuleProcessorTest {
 		rule.setFormula("content > 4");
 
 		// Eventos processados para retorno verdadeiro.
-		final Set<Event> eventsOnTrue = new HashSet<Event>();
+		rule.setEventsOnTrue(new HashSet<>());
 		final Event e1 = new Event();
 		e1.setName("Evento 1");
 		e1.setProcessor("eventLog");
-		eventsOnTrue.add(e1);
+		final EventToProcess eventToProcess1 = new EventToProcess();
+		eventToProcess1.setEvent(e1);
+		rule.getEventsOnTrue().add(eventToProcess1);
 
-		rule.setEventsOnTrue(eventsOnTrue);
-
-		final Set<Event> eventsOnFalse = new HashSet<Event>();
+		// Eventos processados para retorno falso.
+		rule.setEventsOnFalse(new HashSet<>());
 		final Event e2 = new Event();
 		e2.setName("Evento Alarm");
 		e2.setProcessor("eventAlarm");
-		eventsOnFalse.add(e2);
-
-		rule.setEventsOnFalse(eventsOnFalse);
+		final EventToProcess eventToProcess2 = new EventToProcess();
+		eventToProcess2.setEvent(e2);
+		final EventProperty eventProperty = new EventProperty();
+		eventProperty.setEvent(e2);
+		eventProperty.setMandatory(true);
+		eventProperty.setName("alarmLevel");
+		eventProperty.setType(EventPropertyType.ALARM_LEVEL);
+		eventToProcess2.getProperties().put(eventProperty, 1);
+		rule.getEventsOnFalse().add(eventToProcess2);
 
 		producer.setRules(new LinkedHashSet<>());
 		producer.getRules().add(rule);

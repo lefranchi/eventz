@@ -12,7 +12,7 @@ import org.apache.camel.model.RouteDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.lefranchi.eventz.domain.Event;
+import br.com.lefranchi.eventz.domain.EventToProcess;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.engine.RuleProcessorVO;
@@ -60,8 +60,9 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 			if (producer.getEventsOnException().size() > 1)
 				exceptionDefinition.multicast().parallelProcessing();
 
-			producer.getEventsOnException().forEach((event) -> {
-				exceptionDefinition.process(event.getProcessor());
+			producer.getEventsOnException().forEach((eventToProcess) -> {
+				// TODO: SETAR AS VARIAVEIS?
+				exceptionDefinition.process(eventToProcess.getEvent().getProcessor());
 			});
 
 			if (producer.getEventsOnException().size() > 1)
@@ -136,21 +137,22 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 	}
 
-	private void processEvents(final RouteDefinition routeDefinition, final Set<Event> events) {
+	private void processEvents(final RouteDefinition routeDefinition, final Set<EventToProcess> eventsToProcess) {
 
-		if (events == null)
+		if (eventsToProcess == null)
 			return;
 
-		if (events.size() > 0) {
+		if (eventsToProcess.size() > 0) {
 
-			if (events.size() > 1)
+			if (eventsToProcess.size() > 1)
 				routeDefinition.multicast().parallelProcessing();
 
-			events.forEach((event) -> {
-				routeDefinition.process(event.getProcessor());
+			eventsToProcess.forEach((eventToProcess) -> {
+				// TODO: SETAR VARIAVEIS
+				routeDefinition.process(eventToProcess.getEvent().getProcessor());
 			});
 
-			if (events.size() > 1)
+			if (eventsToProcess.size() > 1)
 				routeDefinition.end();
 
 		}

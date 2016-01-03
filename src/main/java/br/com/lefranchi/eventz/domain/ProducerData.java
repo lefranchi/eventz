@@ -48,7 +48,7 @@ public class ProducerData extends AbstractPersistable<Long> {
 	@ElementCollection
 	@MapKeyColumn(name = "key")
 	@Column(name = "value")
-	@CollectionTable(name = "dataValues", joinColumns = @JoinColumn(name = "producer_data_id") )
+	@CollectionTable(name = "data_values", joinColumns = @JoinColumn(name = "producer_data_id") )
 	private Map<String, String> dataValues = new HashMap<String, String>();
 
 	public Producer getProducer() {

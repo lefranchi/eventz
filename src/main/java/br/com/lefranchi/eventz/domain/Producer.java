@@ -49,7 +49,7 @@ public class Producer extends AbstractPersistable<Long> {
 	 * Eventos executados em erro de leitura de dados externos/internos.
 	 */
 	@OneToMany(fetch = FetchType.EAGER)
-	private Set<Event> eventsOnException;
+	private Set<EventToProcess> eventsOnException;
 
 	public String getName() {
 		return name;
@@ -75,11 +75,11 @@ public class Producer extends AbstractPersistable<Long> {
 		this.rules = rules;
 	}
 
-	public Set<Event> getEventsOnException() {
+	public Set<EventToProcess> getEventsOnException() {
 		return eventsOnException;
 	}
 
-	public void setEventsOnException(final Set<Event> eventsOnException) {
+	public void setEventsOnException(final Set<EventToProcess> eventsOnException) {
 		this.eventsOnException = eventsOnException;
 	}
 

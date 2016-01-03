@@ -1,7 +1,10 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -27,11 +30,17 @@ public class Event extends AbstractPersistable<Long> {
 	private String name;
 
 	/**
-	 * Classe processadora do Evento. Será instanciada e executada via
-	 * reflection.
+	 * Classe processadora do Evento.
 	 */
 	@Column(unique = true, nullable = false)
 	private String processor;
+
+	/**
+	 * Lista de propriedades do Evento. No momento da configuração será
+	 * utilizado para configurar a evento a ser executado.
+	 */
+	@OneToMany
+	private Set<EventProperty> properties;
 
 	public String getName() {
 		return name;
@@ -47,6 +56,14 @@ public class Event extends AbstractPersistable<Long> {
 
 	public void setProcessor(final String processor) {
 		this.processor = processor;
+	}
+
+	public Set<EventProperty> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(final Set<EventProperty> properties) {
+		this.properties = properties;
 	}
 
 	@Override
