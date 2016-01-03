@@ -37,7 +37,7 @@ public class Alarm extends AbstractPersistable<Long> {
 	/**
 	 * Dado que gerou o alarme.
 	 */
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private ProducerData producerData;
 
 	/**
@@ -52,6 +52,12 @@ public class Alarm extends AbstractPersistable<Long> {
 	 */
 	@Column(nullable = false)
 	private String formula;
+
+	/**
+	 * Nivel do Alarme.
+	 */
+	@ManyToOne(optional = false)
+	private AlarmLevel level;
 
 	public Calendar getDate() {
 		return date;
@@ -85,8 +91,17 @@ public class Alarm extends AbstractPersistable<Long> {
 		this.formula = formula;
 	}
 
+	public AlarmLevel getLevel() {
+		return level;
+	}
+
+	public void setLevel(final AlarmLevel level) {
+		this.level = level;
+	}
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
 	}
+
 }

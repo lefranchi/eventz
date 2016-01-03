@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.lefranchi.eventz.Application;
 import br.com.lefranchi.eventz.domain.Alarm;
+import br.com.lefranchi.eventz.domain.AlarmLevel;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.ProducerData;
+import br.com.lefranchi.eventz.testutils.AlarmLevelTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerDataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
@@ -35,6 +37,10 @@ public class AlarmRepositoryTests {
 	ProducerData producerData;
 
 	@Autowired
+	AlarmLevelRepository alarmLevelRepository;
+	AlarmLevel alarmLevel;
+
+	@Autowired
 	AlarmRepository repository;
 	Alarm alarm;
 
@@ -45,11 +51,14 @@ public class AlarmRepositoryTests {
 
 		producerData = producerDataRepository.save(ProducerDataTestUtils.newProducerData(producer));
 
+		alarmLevel = alarmLevelRepository.save(AlarmLevelTestUtils.newAlarmLevel());
+
 		alarm = new Alarm();
 		alarm.setProducerData(producerData);
 		alarm.setDate(Calendar.getInstance());
 		alarm.setFormula("iadade > 10");
 		alarm.setType(FormulaType.JEXL);
+		alarm.setLevel(alarmLevel);
 
 	}
 
@@ -63,46 +72,52 @@ public class AlarmRepositoryTests {
 		alarm.setDate(null);
 		alarm.setFormula(null);
 		alarm.setType(null);
+		alarm.setLevel(null);
 
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testAlarmIntegrityProducerData() {
 
-		Alarm alarm = new Alarm();
+		alarm.setProducerData(null);
 
 		alarm = repository.save(alarm);
-		alarm.setProducerData(null);
 
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testAlarmIntegrityDate() {
 
-		Alarm alarm = new Alarm();
+		alarm.setDate(null);
 
 		alarm = repository.save(alarm);
-		alarm.setDate(null);
 
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testAlarmIntegrityFormula() {
 
-		Alarm alarm = new Alarm();
+		alarm.setFormula(null);
 
 		alarm = repository.save(alarm);
-		alarm.setFormula(null);
 
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testAlarmIntegrityType() {
 
-		Alarm alarm = new Alarm();
+		alarm.setType(null);
 
 		alarm = repository.save(alarm);
-		alarm.setType(null);
+
+	}
+
+	@Test(expected = DataIntegrityViolationException.class)
+	public void testAlarmIntegrityLevel() {
+
+		alarm.setLevel(null);
+
+		alarm = repository.save(alarm);
 
 	}
 
