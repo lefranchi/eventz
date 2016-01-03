@@ -45,14 +45,14 @@ public class EventAlarm implements Processor {
 
 		final ProducerData data = exchange.getIn().getBody(RuleProcessorVO.class).getData();
 		final Rule rule = exchange.getIn().getBody(RuleProcessorVO.class).getRule();
-		final Map<EventProperty, Object> eventProperties = (Map<EventProperty, Object>) exchange.getIn()
+		final Map<EventProperty, String> eventProperties = (Map<EventProperty, String>) exchange.getIn()
 				.getHeader("eventProperties");
 
 		LOGGER.info(String.format("Criando alarme para %s", data));
 
 		// TODO: TESTAR SE FOI CONFIGURADA PROPRIEDADE
 		final AlarmLevel alarmLevel = alarmLevelService
-				.findById(Long.valueOf(String.valueOf(getPropertyValue(eventProperties, "alarmLevel"))));
+				.findById(Long.valueOf(getPropertyValue(eventProperties, "alarmLevel")));
 
 		final Alarm alarm = new Alarm();
 
@@ -65,9 +65,9 @@ public class EventAlarm implements Processor {
 
 	}
 
-	private Object getPropertyValue(final Map<EventProperty, Object> eventProperties, final String name) {
+	private String getPropertyValue(final Map<EventProperty, String> eventProperties, final String name) {
 
-		Object retValue = null;
+		String retValue = null;
 
 		if (eventProperties == null || eventProperties.isEmpty())
 			return null;

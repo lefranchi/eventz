@@ -16,6 +16,11 @@ public class AlarmLevelServiceImpl implements AlarmLevelService {
 	AlarmLevelRepository repository;
 
 	@Override
+	public AlarmLevel save(final AlarmLevel alarmLevel) {
+		return repository.save(alarmLevel);
+	}
+
+	@Override
 	public AlarmLevel findById(final Long id) {
 		return repository.findOne(id);
 	}

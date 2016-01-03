@@ -165,7 +165,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 					routeDefinition.pipeline().process(new Processor() {
 						@Override
 						public void process(final Exchange exchange) throws Exception {
-							exchange.getIn().getHeaders().put("eventPropeties", eventToProcess.getProperties());
+							exchange.getIn().getHeaders().put("eventProperties", eventToProcess.getProperties());
 						}
 					});
 				}
