@@ -1,6 +1,7 @@
 package br.com.lefranchi.eventz.engine.event;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -10,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.lefranchi.eventz.domain.Alarm;
+import br.com.lefranchi.eventz.domain.AlarmLevel;
+import br.com.lefranchi.eventz.domain.EventProperty;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.domain.Rule;
 import br.com.lefranchi.eventz.engine.RuleProcessorVO;
-import br.com.lefranchi.eventz.repository.AlarmRepository;
+import br.com.lefranchi.eventz.service.AlarmLevelService;
+import br.com.lefranchi.eventz.service.AlarmService;
 
 /**
  * Cria alarme e salva no banco de dados.
@@ -30,23 +34,52 @@ public class EventAlarm implements Processor {
 	final static Logger LOGGER = LoggerFactory.getLogger(EventAlarm.class);
 
 	@Autowired
-	AlarmRepository alarmRepository;
+	AlarmService alarmService;
 
+	@Autowired
+	AlarmLevelService alarmLevelService;
+
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void process(final Exchange exchange) throws Exception {
 
 		final ProducerData data = exchange.getIn().getBody(RuleProcessorVO.class).getData();
 		final Rule rule = exchange.getIn().getBody(RuleProcessorVO.class).getRule();
+		final Map<EventProperty, Object> eventProperties = (Map<EventProperty, Object>) exchange.getIn()
+				.getHeader("eventProperties");
 
 		LOGGER.info(String.format("Criando alarme para %s", data));
+
+		// TODO: TESTAR SE FOI CONFIGURADA PROPRIEDADE
+		final AlarmLevel alarmLevel = alarmLevelService
+				.findById(Long.valueOf(String.valueOf(getPropertyValue(eventProperties, "alarmLevel"))));
 
 		final Alarm alarm = new Alarm();
 
 		alarm.setDate(Calendar.getInstance());
 		alarm.setFormula(rule.getFormula());
 		alarm.setProducerData(data);
+		alarm.setLevel(alarmLevel);
 
-		alarmRepository.save(alarm);
+		alarmService.save(alarm);
+
+	}
+
+	private Object getPropertyValue(final Map<EventProperty, Object> eventProperties, final String name) {
+
+		Object retValue = null;
+
+		if (eventProperties == null || eventProperties.isEmpty())
+			return null;
+
+		for (final EventProperty ep : eventProperties.keySet()) {
+			if (ep.getName().equals(name)) {
+				retValue = eventProperties.get(ep);
+				break;
+			}
+		}
+
+		return retValue;
 
 	}
 

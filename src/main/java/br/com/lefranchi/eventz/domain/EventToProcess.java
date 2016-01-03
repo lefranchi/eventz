@@ -3,16 +3,17 @@ package br.com.lefranchi.eventz.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.JoinColumn;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+@Entity
 public class EventToProcess extends AbstractPersistable<Long> {
 
 	/**
@@ -29,11 +30,10 @@ public class EventToProcess extends AbstractPersistable<Long> {
 	/**
 	 * Propriedades do Evento.
 	 */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@MapKeyColumn(name = "property")
 	@Column(name = "value")
-	@CollectionTable(name = "event_properties", joinColumns = @JoinColumn(name = "event_to_process_id") )
-	private Map<EventProperty, Object> properties = new HashMap<>();
+	private Map<EventProperty, String> properties = new HashMap<>();
 
 	public Event getEvent() {
 		return event;
@@ -43,11 +43,11 @@ public class EventToProcess extends AbstractPersistable<Long> {
 		this.event = event;
 	}
 
-	public Map<EventProperty, Object> getProperties() {
+	public Map<EventProperty, String> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(final Map<EventProperty, Object> properties) {
+	public void setProperties(final Map<EventProperty, String> properties) {
 		this.properties = properties;
 	}
 

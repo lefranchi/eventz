@@ -90,7 +90,7 @@ public class RuleProcessorTest {
 		eventProperty.setMandatory(true);
 		eventProperty.setName("alarmLevel");
 		eventProperty.setType(EventPropertyType.ALARM_LEVEL);
-		eventToProcess2.getProperties().put(eventProperty, 1);
+		eventToProcess2.getProperties().put(eventProperty, "1");
 		rule.getEventsOnFalse().add(eventToProcess2);
 
 		producer.setRules(new LinkedHashSet<>());

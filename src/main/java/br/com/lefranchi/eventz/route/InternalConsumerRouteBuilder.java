@@ -61,8 +61,20 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 				exceptionDefinition.multicast().parallelProcessing();
 
 			producer.getEventsOnException().forEach((eventToProcess) -> {
-				// TODO: SETAR AS VARIAVEIS?
+				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty()) {
+					exceptionDefinition.pipeline().process(new Processor() {
+						@Override
+						public void process(final Exchange exchange) throws Exception {
+							exchange.getIn().getHeaders().put("eventPropeties", eventToProcess.getProperties());
+						}
+					});
+				}
+
 				exceptionDefinition.process(eventToProcess.getEvent().getProcessor());
+
+				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty())
+					exceptionDefinition.end();
+
 			});
 
 			if (producer.getEventsOnException().size() > 1)
@@ -148,8 +160,21 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 				routeDefinition.multicast().parallelProcessing();
 
 			eventsToProcess.forEach((eventToProcess) -> {
-				// TODO: SETAR VARIAVEIS
+
+				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty()) {
+					routeDefinition.pipeline().process(new Processor() {
+						@Override
+						public void process(final Exchange exchange) throws Exception {
+							exchange.getIn().getHeaders().put("eventPropeties", eventToProcess.getProperties());
+						}
+					});
+				}
+
 				routeDefinition.process(eventToProcess.getEvent().getProcessor());
+
+				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty())
+					routeDefinition.end();
+
 			});
 
 			if (eventsToProcess.size() > 1)
