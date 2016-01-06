@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -27,6 +28,12 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 	 */
 	private static final long serialVersionUID = -2214209733447526912L;
 
+	@Column(nullable = false)
+	private String name;
+
+	@Column
+	private String description;
+
 	/**
 	 * Tipo de Dado que o produtor produzirá.
 	 */
@@ -42,7 +49,7 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 	/**
 	 * Campos contidos no dado.
 	 */
-	@OneToMany(mappedBy = "producerMetadata", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "producerMetadata", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<DataFieldMetadata> fields;
 
 	public String getSampleData() {
@@ -67,6 +74,22 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 
 	public void setFields(final Set<DataFieldMetadata> fields) {
 		this.fields = fields;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	@Override

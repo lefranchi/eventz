@@ -23,6 +23,7 @@ import br.com.lefranchi.eventz.domain.EventToProcess;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.Rule;
+import br.com.lefranchi.eventz.repository.ProducerMetadataRepository;
 import br.com.lefranchi.eventz.repository.ProducerRepository;
 import br.com.lefranchi.eventz.repository.RuleRepository;
 import br.com.lefranchi.eventz.service.AlarmLevelService;
@@ -46,6 +47,9 @@ public class RuleProcessorTest {
 	Producer producer;
 
 	@Autowired
+	ProducerMetadataRepository producerMetadataRepository;
+
+	@Autowired
 	RuleRepository ruleRepository;
 
 	@Autowired
@@ -66,6 +70,7 @@ public class RuleProcessorTest {
 		alarmLevel = alarmLevelService.save(alarmLevel);
 
 		producer = ProducerTestUtils.newProducer();
+		producer.setMetadata(producerMetadataRepository.save(ProducerMetadataTestUtils.newProducerMetadata()));
 
 		// Eventos para erro de execução de rota.
 		producer.setEventsOnException(new HashSet<>());

@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.lefranchi.eventz.Application;
 import br.com.lefranchi.eventz.domain.Producer;
+import br.com.lefranchi.eventz.repository.ProducerMetadataRepository;
 import br.com.lefranchi.eventz.repository.ProducerRepository;
+import br.com.lefranchi.eventz.testutils.ProducerMetadataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,11 +25,16 @@ public class RouteServiceTest {
 	Producer producer;
 
 	@Autowired
+	ProducerMetadataRepository producerMetadataRepository;
+
+	@Autowired
 	RouteService routeService;
 
 	@Before
 	public void setUp() {
 		producer = ProducerTestUtils.newProducer();
+		producer.setMetadata(producerMetadataRepository.save(ProducerMetadataTestUtils.newProducerMetadata()));
+
 		repository.save(producer);
 	}
 

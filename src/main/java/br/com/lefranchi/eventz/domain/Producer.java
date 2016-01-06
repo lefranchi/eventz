@@ -35,7 +35,7 @@ public class Producer extends AbstractPersistable<Long> {
 	/**
 	 * Metadados referentes ao tipo de dado produzido pelo Produtor.
 	 */
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private ProducerMetadata metadata;
 
 	/**
@@ -84,7 +84,7 @@ public class Producer extends AbstractPersistable<Long> {
 
 	@Override
 	public String toString() {
-		return ReflectionToStringBuilder.toStringExclude(this, Arrays.asList("rules"));
+		return ReflectionToStringBuilder.toStringExclude(this, Arrays.asList("rules", "eventsOnException"));
 	}
 
 }

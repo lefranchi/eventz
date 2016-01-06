@@ -14,6 +14,8 @@ public class ProducerMetadataTestUtils {
 	public static ProducerMetadata newProducerMetadata() {
 
 		final ProducerMetadata metadata = new ProducerMetadata();
+		metadata.setName("Metadata 01");
+		metadata.setDescription("Metadado de teste.");
 		metadata.setDataType(ProducerDataType.DELIMITED);
 		metadata.setSampleData(PRODUCER_METADATA_SAMPLE_DATA);
 		metadata.setFields(new TreeSet<>());

@@ -21,6 +21,7 @@ import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.testutils.AlarmLevelTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerDataTestUtils;
+import br.com.lefranchi.eventz.testutils.ProducerMetadataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,6 +32,9 @@ public class AlarmRepositoryTests {
 	@Autowired
 	ProducerRepository producerRepository;
 	Producer producer;
+
+	@Autowired
+	ProducerMetadataRepository producerMetadataRepository;
 
 	@Autowired
 	ProducerDataRepository producerDataRepository;
@@ -47,7 +51,9 @@ public class AlarmRepositoryTests {
 	@Before
 	public void setUp() {
 
-		producer = producerRepository.save(ProducerTestUtils.newProducer());
+		producer = ProducerTestUtils.newProducer();
+		producer.setMetadata(producerMetadataRepository.save(ProducerMetadataTestUtils.newProducerMetadata()));
+		producer = producerRepository.save(producer);
 
 		producerData = producerDataRepository.save(ProducerDataTestUtils.newProducerData(producer));
 
