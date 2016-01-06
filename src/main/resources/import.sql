@@ -25,19 +25,32 @@ INSERT INTO `eventz`.`data_field_metadata` (`name`,`field_order`,`type`,`produce
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
--- Produtor B1
+-- Produtores
 ------------------------------------------------------------------------------------------------------------
 INSERT INTO `eventz`.`producer`(`name`, `metadata`) VALUES ('B1', 1);
+INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (1);
+INSERT INTO `eventz`.`producer_events_on_exception`(`producer`,`events_on_exception`) VALUES (1,1);
 
-
-------------------------------------------------------------------------------------------------------------
--- Produtor B1
-------------------------------------------------------------------------------------------------------------
 INSERT INTO `eventz`.`producer`(`name`, `metadata`) VALUES ('B2', 1);
+INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (1);
+INSERT INTO `eventz`.`producer_events_on_exception`(`producer`,`events_on_exception`) VALUES (2,2);
 
-
-------------------------------------------------------------------------------------------------------------
 INSERT INTO `eventz`.`producer`(`name`, `metadata`) VALUES ('B3', 1);
+INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (1);
+INSERT INTO `eventz`.`producer_events_on_exception`(`producer`,`events_on_exception`) VALUES (3,3);
+------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------
+-- Tipos de Alarmes
+------------------------------------------------------------------------------------------------------------
+INSERT INTO `eventz`.`alarm_level`(`color`,`image`,`name`) VALUES('blue','info.png','Informação');
+INSERT INTO `eventz`.`alarm_level`(`color`,`image`,`name`) VALUES('yellow','warning.png','Atenção');
+INSERT INTO `eventz`.`alarm_level`(`color`,`image`,`name`) VALUES('red','alert.png','Alerta');
+------------------------------------------------------------------------------------------------------------
 
 
 ------------------------------------------------------------------------------------------------------------
+-- Regras
+------------------------------------------------------------------------------------------------------------
+
+-- TODO: FINALIZAR.
