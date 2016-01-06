@@ -46,9 +46,9 @@ public class ProducerData extends AbstractPersistable<Long> {
 	 * Variaveis e valores extraidos.
 	 */
 	@ElementCollection
-	@MapKeyColumn(name = "key")
-	@Column(name = "value")
-	@CollectionTable(name = "data_values", joinColumns = @JoinColumn(name = "producer_data_id") )
+	@MapKeyColumn(name = "data_key")
+	@Column(name = "data_value")
+	@CollectionTable(name = "producer_data_values", joinColumns = @JoinColumn(name = "producer_data_id") )
 	private Map<String, String> dataValues = new HashMap<String, String>();
 
 	public Producer getProducer() {
