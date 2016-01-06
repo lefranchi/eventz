@@ -33,6 +33,12 @@ public class Producer extends AbstractPersistable<Long> {
 	private String name;
 
 	/**
+	 * Grupo do Produtor.
+	 */
+	@ManyToOne
+	private ProducerGroup producerGroup;
+
+	/**
 	 * Metadados referentes ao tipo de dado produzido pelo Produtor.
 	 */
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -80,6 +86,14 @@ public class Producer extends AbstractPersistable<Long> {
 
 	public void setEventsOnException(final Set<EventToProcess> eventsOnException) {
 		this.eventsOnException = eventsOnException;
+	}
+
+	public ProducerGroup getProducerGroup() {
+		return producerGroup;
+	}
+
+	public void setProducerGroup(ProducerGroup producerGroup) {
+		this.producerGroup = producerGroup;
 	}
 
 	@Override

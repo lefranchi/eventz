@@ -39,6 +39,12 @@ public class Rule extends AbstractPersistable<Long> {
 	private Producer producer;
 
 	/**
+	 * Executada para o grupo do produtor.
+	 */
+	@ManyToOne
+	private ProducerGroup producerGroup;
+
+	/**
 	 * Tipo de Formula.
 	 */
 	@Column(nullable = false)
@@ -124,6 +130,14 @@ public class Rule extends AbstractPersistable<Long> {
 
 	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
+	}
+
+	public ProducerGroup getProducerGroup() {
+		return producerGroup;
+	}
+
+	public void setProducerGroup(ProducerGroup producerGroup) {
+		this.producerGroup = producerGroup;
 	}
 
 	@Override
