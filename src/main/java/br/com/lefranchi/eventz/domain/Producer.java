@@ -3,12 +3,11 @@ package br.com.lefranchi.eventz.domain;
 import java.util.Arrays;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -36,7 +35,7 @@ public class Producer extends AbstractPersistable<Long> {
 	/**
 	 * Metadados referentes ao tipo de dado produzido pelo Produtor.
 	 */
-	@OneToOne(mappedBy = "producer", cascade = CascadeType.ALL)
+	@ManyToOne(optional = false)
 	private ProducerMetadata metadata;
 
 	/**

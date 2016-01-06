@@ -27,6 +27,7 @@ import br.com.lefranchi.eventz.repository.ProducerRepository;
 import br.com.lefranchi.eventz.repository.RuleRepository;
 import br.com.lefranchi.eventz.service.AlarmLevelService;
 import br.com.lefranchi.eventz.service.RouteService;
+import br.com.lefranchi.eventz.testutils.ProducerMetadataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -128,7 +129,7 @@ public class RuleProcessorTest {
 			return;
 		}
 
-		producerTemplate.sendBody(ProducerTestUtils.PRODUCER_SAMPLE_DATA);
+		producerTemplate.sendBody(ProducerMetadataTestUtils.PRODUCER_METADATA_SAMPLE_DATA);
 
 	}
 

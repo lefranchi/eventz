@@ -7,9 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -30,13 +28,6 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 	private static final long serialVersionUID = -2214209733447526912L;
 
 	/**
-	 * Produtor do Metadado.
-	 */
-	@OneToOne
-	@MapsId
-	private Producer producer;
-
-	/**
 	 * Tipo de Dado que o produtor produzirá.
 	 */
 	@Enumerated(EnumType.STRING)
@@ -53,14 +44,6 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 	 */
 	@OneToMany(mappedBy = "producerMetadata", cascade = CascadeType.ALL)
 	private Set<DataFieldMetadata> fields;
-
-	public Producer getProducer() {
-		return producer;
-	}
-
-	public void setProducer(final Producer producer) {
-		this.producer = producer;
-	}
 
 	public String getSampleData() {
 		return sampleData;
