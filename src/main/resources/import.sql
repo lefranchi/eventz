@@ -31,6 +31,10 @@ INSERT INTO `eventz`.`data_field_metadata` (`name`,`field_order`,`type`,`produce
 -- Grupo de Produtores
 ------------------------------------------------------------------------------------------------------------
 INSERT INTO `eventz`.`producer_group`(`name`) VALUES ('BOMBAS');
+
+-- TODO INSERIR ON EXCEPTION AQUI
+
+-- TODO INSERIR ON ALAWAYS PARA SALVAR AQUI 
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
