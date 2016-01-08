@@ -3,6 +3,7 @@ package br.com.lefranchi.eventz.domain;
 import java.util.Arrays;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -62,7 +63,10 @@ public class Producer extends AbstractPersistable<Long> {
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnException;
 
-	@ManyToOne
+	/**
+	 * Metodo de entrada dos dados.
+	 */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private ProducerInputMethod inputMethod;
 
 	public String getName() {

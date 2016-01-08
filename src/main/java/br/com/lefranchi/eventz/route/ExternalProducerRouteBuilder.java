@@ -1,10 +1,9 @@
 package br.com.lefranchi.eventz.route;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import br.com.lefranchi.eventz.domain.Producer;
+import br.com.lefranchi.eventz.domain.ProducerInputMethod;
 
 /**
  * Rotas que recebem/coletam informações ao mundo externo e produzem objetos na
@@ -36,17 +35,36 @@ public class ExternalProducerRouteBuilder extends RouteBuilder {
 	@Override
 	public void configure() throws Exception {
 
-		// TODO: A forma de coletar a inforação externa deve ser definida no
-		// Producer. Definir o nome da fila de destino para o nome do produtor.
-		from("").process(new Processor() {
+		final ProducerInputMethod producerInputMethod = extractProducerInputMethod();
 
-			@Override
-			public void process(final Exchange exchange) throws Exception {
-				// TODO Auto-generated method stub
+		final StringBuilder fromClause = new StringBuilder(producerInputMethod.getInputMethod().getComponentName())
+				.append("?");
 
+		if (producerInputMethod.getProperties() != null) {
+			producerInputMethod.getProperties().forEach((key, value) -> {
+				fromClause.append(key).append("=").append(value).append(";");
+			});
+		}
+
+		from(fromClause.toString()).to("activemq:queue:" + getProducer().getName().trim());
+
+	}
+
+	private ProducerInputMethod extractProducerInputMethod() {
+
+		ProducerInputMethod producerInputMethod = null;
+
+		if (producer.getInputMethod() != null) {
+			producerInputMethod = producer.getInputMethod();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getInputMethod() != null) {
+					producerInputMethod = producer.getProducerGroup().getInputMethod();
+				}
 			}
-		}).to("activemq:queue:" + getProducer().getName().trim());
+		}
 
+		return producerInputMethod;
 	}
 
 	public Producer getProducer() {

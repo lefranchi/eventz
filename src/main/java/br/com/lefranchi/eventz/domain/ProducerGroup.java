@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -36,6 +37,12 @@ public class ProducerGroup extends AbstractPersistable<Long> {
 	 */
 	@OneToMany(mappedBy = "producerGroup", fetch = FetchType.EAGER)
 	private Set<Producer> producers;
+
+	/**
+	 * Metodo de entrada dos dados.
+	 */
+	@ManyToOne
+	private ProducerInputMethod inputMethod;
 
 	/**
 	 * Executada para o produtor.
@@ -93,6 +100,14 @@ public class ProducerGroup extends AbstractPersistable<Long> {
 
 	public void setEventsOnException(final Set<EventToProcess> eventsOnException) {
 		this.eventsOnException = eventsOnException;
+	}
+
+	public ProducerInputMethod getInputMethod() {
+		return inputMethod;
+	}
+
+	public void setInputMethod(final ProducerInputMethod inputMethod) {
+		this.inputMethod = inputMethod;
 	}
 
 	@Override
