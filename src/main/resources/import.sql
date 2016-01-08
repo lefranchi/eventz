@@ -69,7 +69,7 @@ INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`p
 -- Gerar alarme de alerta quando conteudo for menor que 2.
 INSERT INTO `eventz`.`rule`(`formula`,`name`,`type`,`producer`,`producer_group`) VALUES ('content <= 2','BOMBA - Conteudo em Alerta','JEXL',NULL,1);
 INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (3);
-INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (1, 4);
+INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (2, 4);
 INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`properties_key`) VALUES (4, '3', 1);
 ------------------------------------------------------------------------------------------------------------
 

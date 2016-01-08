@@ -62,6 +62,9 @@ public class Producer extends AbstractPersistable<Long> {
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnException;
 
+	@ManyToOne
+	private ProducerInputMethod inputMethod;
+
 	public String getName() {
 		return name;
 	}
@@ -108,6 +111,14 @@ public class Producer extends AbstractPersistable<Long> {
 
 	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
+	}
+
+	public ProducerInputMethod getInputMethod() {
+		return inputMethod;
+	}
+
+	public void setInputMethod(final ProducerInputMethod inputMethod) {
+		this.inputMethod = inputMethod;
 	}
 
 	@Override
