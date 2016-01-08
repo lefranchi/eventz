@@ -16,6 +16,17 @@ INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES 
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
+-- Metodos de Entrada
+------------------------------------------------------------------------------------------------------------
+INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('file:/VAR','Leitor de arquivos.','File TMP');
+INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delay');
+INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delete');
+
+INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
+INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'6000','delay');
+INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'false','delete');
+
+------------------------------------------------------------------------------------------------------------
 -- Metadados de Produtores
 ------------------------------------------------------------------------------------------------------------
 INSERT INTO `eventz`.`producer_metadata`(`name`, `description`, `data_type`,`sample_data`) VALUES ('Bombas', 'Dados recebidos de bombas do tipo TRE34', 'DELIMITED', '88745;LEANDRO FRANCHI;1979;0;25.4');
@@ -30,7 +41,7 @@ INSERT INTO `eventz`.`data_field_metadata` (`name`,`field_order`,`type`,`produce
 ------------------------------------------------------------------------------------------------------------
 -- Grupo de Produtores
 ------------------------------------------------------------------------------------------------------------
-INSERT INTO `eventz`.`producer_group`(`name`) VALUES ('BOMBAS');
+INSERT INTO `eventz`.`producer_group`(`name`, `input_method`) VALUES ('BOMBAS', 1);
 
 -- On Exception deve ser logado.
 INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (1);

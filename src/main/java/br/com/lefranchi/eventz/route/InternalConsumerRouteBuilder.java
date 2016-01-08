@@ -176,14 +176,6 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		routeDefinition.to("log:Execucao de rota finalizada.");
 
-		System.out.println(" ");
-		System.out.println(" ");
-		System.out.println(" ");
-		System.out.println(routeDefinition.toString());
-		System.out.println(" ");
-		System.out.println(" ");
-		System.out.println(" ");
-
 	}
 
 	private Set<Rule> extractRules() {
