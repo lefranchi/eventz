@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import br.com.lefranchi.eventz.domain.EventToProcess;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.ProducerData;
+import br.com.lefranchi.eventz.domain.Rule;
 import br.com.lefranchi.eventz.engine.RuleProcessorVO;
 
 /**
@@ -53,14 +54,16 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		errorHandler(loggingErrorHandler("internal.consumer").level(LoggingLevel.ERROR));
 
-		if (producer.getEventsOnException() != null && producer.getEventsOnException().size() > 0) {
+		final Set<EventToProcess> eventsOnException = extractEventsOnException();
+
+		if (eventsOnException != null && eventsOnException.size() > 0) {
 
 			final OnExceptionDefinition exceptionDefinition = onException(RuntimeException.class);
 
-			if (producer.getEventsOnException().size() > 1)
+			if (eventsOnException.size() > 1)
 				exceptionDefinition.multicast().parallelProcessing();
 
-			producer.getEventsOnException().forEach((eventToProcess) -> {
+			eventsOnException.forEach((eventToProcess) -> {
 				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty()) {
 					exceptionDefinition.pipeline().process(new Processor() {
 						@Override
@@ -77,7 +80,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 			});
 
-			if (producer.getEventsOnException().size() > 1)
+			if (eventsOnException.size() > 1)
 				exceptionDefinition.end();
 
 		}
@@ -102,12 +105,14 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 				});
 
-		if (producer.getRules() != null && producer.getRules().size() > 0) {
+		final Set<Rule> rules = extractRules();
 
-			if (producer.getRules().size() > 1)
+		if (rules != null && rules.size() > 0) {
+
+			if (rules.size() > 1)
 				routeDefinition.multicast().parallelProcessing();
 
-			producer.getRules().forEach((rule) -> {
+			rules.forEach((rule) -> {
 
 				routeDefinition.process(new Processor() {
 					@Override
@@ -140,13 +145,83 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 			});
 
-			if (producer.getRules().size() > 1)
+			if (rules.size() > 1)
+				routeDefinition.end();
+
+		}
+
+		final Set<EventToProcess> eventsOnAlways = extractEventsOnAwalys();
+
+		if (eventsOnAlways != null && eventsOnAlways.size() > 0) {
+
+			if (eventsOnAlways.size() > 1)
+				routeDefinition.multicast().parallelProcessing();
+
+			eventsOnAlways.forEach((eventToProcess) -> {
+				routeDefinition.process(eventToProcess.getEvent().getProcessor());
+			});
+
+			if (eventsOnAlways.size() > 1)
 				routeDefinition.end();
 
 		}
 
 		routeDefinition.to("log:Execucao de rota finalizada.");
 
+	}
+
+	private Set<Rule> extractRules() {
+
+		Set<Rule> rules = null;
+
+		if (producer.getRules() != null && producer.getRules().size() > 0) {
+			rules = producer.getRules();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getRules() != null
+						&& producer.getProducerGroup().getRules().size() > 0) {
+					rules = producer.getProducerGroup().getRules();
+				}
+			}
+		}
+
+		return rules;
+	}
+
+	private Set<EventToProcess> extractEventsOnAwalys() {
+
+		Set<EventToProcess> events = null;
+
+		if (producer.getEventsOnAlways() != null && producer.getEventsOnAlways().size() > 0) {
+			events = producer.getEventsOnAlways();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getEventsOnAlways() != null
+						&& producer.getProducerGroup().getEventsOnAlways().size() > 0) {
+					events = producer.getProducerGroup().getEventsOnAlways();
+				}
+			}
+		}
+
+		return events;
+	}
+
+	private Set<EventToProcess> extractEventsOnException() {
+
+		Set<EventToProcess> events = null;
+
+		if (producer.getEventsOnException() != null && producer.getEventsOnException().size() > 0) {
+			events = producer.getEventsOnException();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getEventsOnException() != null
+						&& producer.getProducerGroup().getEventsOnException().size() > 0) {
+					events = producer.getProducerGroup().getEventsOnException();
+				}
+			}
+		}
+
+		return events;
 	}
 
 	private void processEvents(final RouteDefinition routeDefinition, final Set<EventToProcess> eventsToProcess) {

@@ -51,6 +51,12 @@ public class Producer extends AbstractPersistable<Long> {
 	private Set<Rule> rules;
 
 	/**
+	 * Eventos executados sempre.
+	 */
+	@OneToMany(fetch = FetchType.EAGER)
+	private Set<EventToProcess> eventsOnAlways;
+
+	/**
 	 * Eventos executados em erro de leitura de dados externos/internos.
 	 */
 	@OneToMany(fetch = FetchType.EAGER)
@@ -92,13 +98,22 @@ public class Producer extends AbstractPersistable<Long> {
 		return producerGroup;
 	}
 
-	public void setProducerGroup(ProducerGroup producerGroup) {
+	public void setProducerGroup(final ProducerGroup producerGroup) {
 		this.producerGroup = producerGroup;
+	}
+
+	public Set<EventToProcess> getEventsOnAlways() {
+		return eventsOnAlways;
+	}
+
+	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
+		this.eventsOnAlways = eventsOnAlways;
 	}
 
 	@Override
 	public String toString() {
-		return ReflectionToStringBuilder.toStringExclude(this, Arrays.asList("rules", "eventsOnException"));
+		return ReflectionToStringBuilder.toStringExclude(this,
+				Arrays.asList("rules", "eventsOnAlways", "eventsOnException"));
 	}
 
 }
