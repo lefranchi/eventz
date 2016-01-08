@@ -6,6 +6,8 @@ public interface RouteService {
 
 	public void loadRoutes();
 
-	void loadRoute(final Producer producer) throws Exception;
+	void loadInternalRoute(final Producer producer) throws Exception;
+
+	void loadExternalRoute(Producer producer) throws Exception;
 
 }

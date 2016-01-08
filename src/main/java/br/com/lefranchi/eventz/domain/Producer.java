@@ -3,6 +3,7 @@ package br.com.lefranchi.eventz.domain;
 import java.util.Arrays;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -62,6 +63,12 @@ public class Producer extends AbstractPersistable<Long> {
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnException;
 
+	/**
+	 * Metodo de entrada dos dados.
+	 */
+	@ManyToOne(cascade = CascadeType.ALL)
+	private ProducerInputMethod inputMethod;
+
 	public String getName() {
 		return name;
 	}
@@ -108,6 +115,14 @@ public class Producer extends AbstractPersistable<Long> {
 
 	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
+	}
+
+	public ProducerInputMethod getInputMethod() {
+		return inputMethod;
+	}
+
+	public void setInputMethod(final ProducerInputMethod inputMethod) {
+		this.inputMethod = inputMethod;
 	}
 
 	@Override
