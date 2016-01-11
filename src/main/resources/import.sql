@@ -18,13 +18,18 @@ INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES 
 ------------------------------------------------------------------------------------------------------------
 -- Metodos de Entrada
 ------------------------------------------------------------------------------------------------------------
-INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('file:/VAR','Leitor de arquivos.','File TMP');
-INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delay');
-INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delete');
 
-INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
-INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'6000','delay');
-INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'false','delete');
+-- HTTP
+INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('jetty:http://0.0.0.0:2121/eventz/VAR','Leitor de mensagens usado no simulador.','Receptor HTTP.');
+
+-- ARQUIVO
+-- INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('file:/VAR','Leitor de arquivos.','File TMP');
+-- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delay');
+-- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delete');
+
+-- INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
+-- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'6000','delay');
+-- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'false','delete');
 
 ------------------------------------------------------------------------------------------------------------
 -- Metadados de Produtores

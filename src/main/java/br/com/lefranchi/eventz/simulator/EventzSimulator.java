@@ -9,6 +9,8 @@ import org.apache.camel.main.Main;
 import org.apache.camel.main.MainListenerSupport;
 import org.apache.camel.main.MainSupport;
 
+import br.com.lefranchi.eventz.testutils.ProducerDataTestUtils;
+
 /**
  * Simulador que deve gerar dados de entrada para os produtores.
  * 
@@ -29,10 +31,9 @@ public class EventzSimulator {
 		main = new Main();
 		// enable hangup support so you can press ctrl + c to terminate the JVM
 		main.enableHangupSupport();
-		// bind MyBean into the registery
-		main.bind("foo", new MyBean());
 		// add routes
-		main.addRouteBuilder(new MyRouteBuilder());
+		// main.addRouteBuilder(new ConsumerRouteBuilder());
+		main.addRouteBuilder(new ProducerRouteBuilder());
 		// add event listener
 		main.addMainListener(new Events());
 
@@ -42,21 +43,29 @@ public class EventzSimulator {
 
 	}
 
-	private static class MyRouteBuilder extends RouteBuilder {
+	private static class ConsumerRouteBuilder extends RouteBuilder {
+		@Override
+		public void configure() throws Exception {
+			from("jetty:http://0.0.0.0:2121/eventz/simulator/").process(new Processor() {
+				@Override
+				public void process(final Exchange exchange) throws Exception {
+					System.out.println("Invoked timer at " + new Date() + " and has body "
+							+ exchange.getIn().getBody(String.class));
+				}
+			}).log("finished");
+		}
+	}
+
+	private static class ProducerRouteBuilder extends RouteBuilder {
 		@Override
 		public void configure() throws Exception {
 			from("timer:foo?delay=2000").process(new Processor() {
 				@Override
 				public void process(final Exchange exchange) throws Exception {
 					System.out.println("Invoked timer at " + new Date());
+					exchange.getIn().setBody(ProducerDataTestUtils.PRODUCER_DATA, String.class);
 				}
-			}).bean("foo");
-		}
-	}
-
-	public static class MyBean {
-		public void callMe() {
-			System.out.println("MyBean.calleMe method has been called");
+			}).to("http4://0.0.0.0:2121/eventz/B1/");
 		}
 	}
 
