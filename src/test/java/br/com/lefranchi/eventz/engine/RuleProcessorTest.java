@@ -127,7 +127,7 @@ public class RuleProcessorTest {
 	public void basicRuleTest() {
 
 		try {
-			routeService.loadRoute(producer);
+			routeService.loadInternalRoute(producer);
 		} catch (final Exception e) {
 			assert false;
 			e.printStackTrace();

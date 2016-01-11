@@ -7,7 +7,9 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.Predicate;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.MulticastDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
+import org.apache.camel.model.PipelineDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import br.com.lefranchi.eventz.domain.EventToProcess;
 import br.com.lefranchi.eventz.domain.Producer;
 import br.com.lefranchi.eventz.domain.ProducerData;
+import br.com.lefranchi.eventz.domain.Rule;
 import br.com.lefranchi.eventz.engine.RuleProcessorVO;
 
 /**
@@ -53,16 +56,20 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		errorHandler(loggingErrorHandler("internal.consumer").level(LoggingLevel.ERROR));
 
-		if (producer.getEventsOnException() != null && producer.getEventsOnException().size() > 0) {
+		final Set<EventToProcess> eventsOnException = extractEventsOnException();
+
+		if (eventsOnException != null && eventsOnException.size() > 0) {
 
 			final OnExceptionDefinition exceptionDefinition = onException(RuntimeException.class);
 
-			if (producer.getEventsOnException().size() > 1)
-				exceptionDefinition.multicast().parallelProcessing();
+			final MulticastDefinition multicastDefinition = exceptionDefinition.multicast().parallelProcessing();
 
-			producer.getEventsOnException().forEach((eventToProcess) -> {
+			eventsOnException.forEach((eventToProcess) -> {
+
+				final PipelineDefinition pipelineDefinition = multicastDefinition.pipeline();
+
 				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty()) {
-					exceptionDefinition.pipeline().process(new Processor() {
+					pipelineDefinition.process(new Processor() {
 						@Override
 						public void process(final Exchange exchange) throws Exception {
 							exchange.getIn().getHeaders().put("eventPropeties", eventToProcess.getProperties());
@@ -70,15 +77,13 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 					});
 				}
 
-				exceptionDefinition.process(eventToProcess.getEvent().getProcessor());
+				pipelineDefinition.process(eventToProcess.getEvent().getProcessor());
 
-				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty())
-					exceptionDefinition.end();
+				pipelineDefinition.end();
 
 			});
 
-			if (producer.getEventsOnException().size() > 1)
-				exceptionDefinition.end();
+			multicastDefinition.end();
 
 		}
 
@@ -102,45 +107,69 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 				});
 
-		if (producer.getRules() != null && producer.getRules().size() > 0) {
+		routeDefinition.setId(String.format("internal_%s", getProducer().getName().replaceAll("\\s+", "")));
 
-			if (producer.getRules().size() > 1)
-				routeDefinition.multicast().parallelProcessing();
+		final Set<Rule> rules = extractRules();
 
-			producer.getRules().forEach((rule) -> {
+		if (rules != null && rules.size() > 0) {
 
-				routeDefinition.process(new Processor() {
+			final MulticastDefinition multicastDefinition = routeDefinition.multicast().parallelProcessing();
+
+			rules.forEach((rule) -> {
+
+				final PipelineDefinition pipelineDefinition = multicastDefinition.pipeline();
+
+				pipelineDefinition.process(new Processor() {
 					@Override
 					public void process(final Exchange exchange) throws Exception {
 						exchange.getIn().getBody(RuleProcessorVO.class).setRule(rule);
 					}
 				});
 
-				routeDefinition.process("ruleProcessor");
+				pipelineDefinition.process("ruleProcessor");
 
-				routeDefinition.choice().when(new Predicate() {
+				pipelineDefinition.choice().when(new Predicate() {
 					@Override
 					public boolean matches(final Exchange exchange) {
 						return exchange.getIn().getBody(RuleProcessorVO.class).getResult();
 					}
 				});
 
-				processEvents(routeDefinition, rule.getEventsOnTrue());
+				processEvents(pipelineDefinition, rule.getEventsOnTrue());
 
-				routeDefinition.choice().when(new Predicate() {
+				pipelineDefinition.choice().when(new Predicate() {
 					@Override
 					public boolean matches(final Exchange exchange) {
 						return !exchange.getIn().getBody(RuleProcessorVO.class).getResult();
 					}
 				});
 
-				processEvents(routeDefinition, rule.getEventsOnFalse());
+				processEvents(pipelineDefinition, rule.getEventsOnFalse());
 
-				processEvents(routeDefinition, rule.getEventsOnAlways());
+				processEvents(pipelineDefinition, rule.getEventsOnAlways());
+
+				pipelineDefinition.end();
 
 			});
 
-			if (producer.getRules().size() > 1)
+			multicastDefinition.end();
+
+		}
+
+		final Set<EventToProcess> eventsOnAlways = extractEventsOnAwalys();
+
+		if (eventsOnAlways != null && eventsOnAlways.size() > 0) {
+
+			if (eventsOnAlways.size() > 1)
+				routeDefinition.multicast().parallelProcessing();
+
+			for (final EventToProcess eventToProcess : eventsOnAlways) {
+				// eventsOnAlways.forEach((eventToProcess) -> {
+				routeDefinition.process(eventToProcess.getEvent().getProcessor());
+				// });
+			}
+
+			if (eventsOnAlways.size() > 1)
 				routeDefinition.end();
 
 		}
@@ -149,20 +178,75 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 	}
 
-	private void processEvents(final RouteDefinition routeDefinition, final Set<EventToProcess> eventsToProcess) {
+	private Set<Rule> extractRules() {
+
+		Set<Rule> rules = null;
+
+		if (producer.getRules() != null && producer.getRules().size() > 0) {
+			rules = producer.getRules();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getRules() != null
+						&& producer.getProducerGroup().getRules().size() > 0) {
+					rules = producer.getProducerGroup().getRules();
+				}
+			}
+		}
+
+		return rules;
+	}
+
+	private Set<EventToProcess> extractEventsOnAwalys() {
+
+		Set<EventToProcess> events = null;
+
+		if (producer.getEventsOnAlways() != null && producer.getEventsOnAlways().size() > 0) {
+			events = producer.getEventsOnAlways();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getEventsOnAlways() != null
+						&& producer.getProducerGroup().getEventsOnAlways().size() > 0) {
+					events = producer.getProducerGroup().getEventsOnAlways();
+				}
+			}
+		}
+
+		return events;
+	}
+
+	private Set<EventToProcess> extractEventsOnException() {
+
+		Set<EventToProcess> events = null;
+
+		if (producer.getEventsOnException() != null && producer.getEventsOnException().size() > 0) {
+			events = producer.getEventsOnException();
+		} else {
+			if (producer.getProducerGroup() != null) {
+				if (producer.getProducerGroup().getEventsOnException() != null
+						&& producer.getProducerGroup().getEventsOnException().size() > 0) {
+					events = producer.getProducerGroup().getEventsOnException();
+				}
+			}
+		}
+
+		return events;
+	}
+
+	private void processEvents(final PipelineDefinition pipelineDefinition, final Set<EventToProcess> eventsToProcess) {
 
 		if (eventsToProcess == null)
 			return;
 
 		if (eventsToProcess.size() > 0) {
 
-			if (eventsToProcess.size() > 1)
-				routeDefinition.multicast().parallelProcessing();
+			final MulticastDefinition multicastDefinition = pipelineDefinition.multicast().parallelProcessing();
 
 			eventsToProcess.forEach((eventToProcess) -> {
 
+				final PipelineDefinition pipelineDefinition2 = multicastDefinition.pipeline();
+
 				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty()) {
-					routeDefinition.pipeline().process(new Processor() {
+					pipelineDefinition2.process(new Processor() {
 						@Override
 						public void process(final Exchange exchange) throws Exception {
 							exchange.getIn().getHeaders().put("eventProperties", eventToProcess.getProperties());
@@ -170,15 +254,13 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 					});
 				}
 
-				routeDefinition.process(eventToProcess.getEvent().getProcessor());
+				pipelineDefinition2.process(eventToProcess.getEvent().getProcessor());
 
-				if (eventToProcess.getProperties() != null && !eventToProcess.getProperties().isEmpty())
-					routeDefinition.end();
+				pipelineDefinition2.end();
 
 			});
 
-			if (eventsToProcess.size() > 1)
-				routeDefinition.end();
+			multicastDefinition.end();
 
 		}
 

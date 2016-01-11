@@ -39,7 +39,7 @@ public class Event extends AbstractPersistable<Long> {
 	 * Lista de propriedades do Evento. No momento da configuração será
 	 * utilizado para configurar a evento a ser executado.
 	 */
-	@OneToMany
+	@OneToMany(mappedBy = "event")
 	private Set<EventProperty> properties;
 
 	public String getName() {

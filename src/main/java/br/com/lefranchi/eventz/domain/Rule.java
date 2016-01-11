@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -39,6 +40,12 @@ public class Rule extends AbstractPersistable<Long> {
 	private Producer producer;
 
 	/**
+	 * Executada para o grupo do produtor.
+	 */
+	@ManyToOne
+	private ProducerGroup producerGroup;
+
+	/**
 	 * Tipo de Formula.
 	 */
 	@Column(nullable = false)
@@ -55,19 +62,19 @@ public class Rule extends AbstractPersistable<Long> {
 	 * Eventos que serão executados quando o resultado da formula for
 	 * verdadeiro.
 	 */
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnTrue;
 
 	/**
 	 * Eventos que serão executados quando o resultados da formula for falso.
 	 */
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnFalse;
 
 	/**
 	 * Eventos que são sempre executados.
 	 */
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnAlways;
 
 	public String getName() {
@@ -124,6 +131,14 @@ public class Rule extends AbstractPersistable<Long> {
 
 	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
+	}
+
+	public ProducerGroup getProducerGroup() {
+		return producerGroup;
+	}
+
+	public void setProducerGroup(final ProducerGroup producerGroup) {
+		this.producerGroup = producerGroup;
 	}
 
 	@Override

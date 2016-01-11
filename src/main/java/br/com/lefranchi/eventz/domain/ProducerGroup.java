@@ -3,7 +3,6 @@ package br.com.lefranchi.eventz.domain;
 import java.util.Arrays;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,41 +13,41 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
- * Produtor de Dados.
+ * Agrupamento de Produtores.
  * 
  * @author lfranchi
  *
  */
 @Entity
-public class Producer extends AbstractPersistable<Long> {
+public class ProducerGroup extends AbstractPersistable<Long> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3589065248968006521L;
+	private static final long serialVersionUID = 739871589708569199L;
 
 	/**
-	 * Nome do Produtor.
+	 * Nome do Grupo de Produtor.
 	 */
 	@Column(unique = true)
 	private String name;
 
 	/**
-	 * Grupo do Produtor.
+	 * Produtores.
 	 */
-	@ManyToOne
-	private ProducerGroup producerGroup;
+	@OneToMany(mappedBy = "producerGroup", fetch = FetchType.EAGER)
+	private Set<Producer> producers;
 
 	/**
-	 * Metadados referentes ao tipo de dado produzido pelo Produtor.
+	 * Metodo de entrada dos dados.
 	 */
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	private ProducerMetadata metadata;
+	@ManyToOne
+	private ProducerInputMethod inputMethod;
 
 	/**
 	 * Executada para o produtor.
 	 */
-	@OneToMany(mappedBy = "producer", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "producerGroup", fetch = FetchType.EAGER)
 	private Set<Rule> rules;
 
 	/**
@@ -63,12 +62,6 @@ public class Producer extends AbstractPersistable<Long> {
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<EventToProcess> eventsOnException;
 
-	/**
-	 * Metodo de entrada dos dados.
-	 */
-	@ManyToOne(cascade = CascadeType.ALL)
-	private ProducerInputMethod inputMethod;
-
 	public String getName() {
 		return name;
 	}
@@ -77,12 +70,12 @@ public class Producer extends AbstractPersistable<Long> {
 		this.name = name;
 	}
 
-	public ProducerMetadata getMetadata() {
-		return metadata;
+	public Set<Producer> getProducers() {
+		return producers;
 	}
 
-	public void setMetadata(final ProducerMetadata metadata) {
-		this.metadata = metadata;
+	public void setProducers(final Set<Producer> producers) {
+		this.producers = producers;
 	}
 
 	public Set<Rule> getRules() {
@@ -93,28 +86,20 @@ public class Producer extends AbstractPersistable<Long> {
 		this.rules = rules;
 	}
 
-	public Set<EventToProcess> getEventsOnException() {
-		return eventsOnException;
-	}
-
-	public void setEventsOnException(final Set<EventToProcess> eventsOnException) {
-		this.eventsOnException = eventsOnException;
-	}
-
-	public ProducerGroup getProducerGroup() {
-		return producerGroup;
-	}
-
-	public void setProducerGroup(final ProducerGroup producerGroup) {
-		this.producerGroup = producerGroup;
-	}
-
 	public Set<EventToProcess> getEventsOnAlways() {
 		return eventsOnAlways;
 	}
 
 	public void setEventsOnAlways(final Set<EventToProcess> eventsOnAlways) {
 		this.eventsOnAlways = eventsOnAlways;
+	}
+
+	public Set<EventToProcess> getEventsOnException() {
+		return eventsOnException;
+	}
+
+	public void setEventsOnException(final Set<EventToProcess> eventsOnException) {
+		this.eventsOnException = eventsOnException;
 	}
 
 	public ProducerInputMethod getInputMethod() {
@@ -128,7 +113,7 @@ public class Producer extends AbstractPersistable<Long> {
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toStringExclude(this,
-				Arrays.asList("rules", "eventsOnAlways", "eventsOnException"));
+				Arrays.asList("rules", "producers", "eventsOnAlways", "eventsOnException"));
 	}
 
 }
