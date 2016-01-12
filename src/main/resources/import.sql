@@ -27,7 +27,7 @@ INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUE
 -- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delay');
 -- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delete');
 
--- INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
+INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
 -- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'6000','delay');
 -- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'false','delete');
 

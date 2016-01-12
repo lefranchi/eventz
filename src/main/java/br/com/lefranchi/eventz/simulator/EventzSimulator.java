@@ -59,7 +59,7 @@ public class EventzSimulator {
 	private static class ProducerRouteBuilder extends RouteBuilder {
 		@Override
 		public void configure() throws Exception {
-			from("timer:foo?delay=2000").process(new Processor() {
+			from("timer:foo?delay=12000").process(new Processor() {
 				@Override
 				public void process(final Exchange exchange) throws Exception {
 					System.out.println("Invoked timer at " + new Date());
