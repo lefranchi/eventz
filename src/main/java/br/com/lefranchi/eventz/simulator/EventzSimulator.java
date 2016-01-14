@@ -42,10 +42,11 @@ public class EventzSimulator {
 
 	}
 
+	@SuppressWarnings("unused")
 	private static class ConsumerRouteBuilder extends RouteBuilder {
 		@Override
 		public void configure() throws Exception {
-			from("jetty:http://0.0.0.0:2121/eventz/simulator/").process(new Processor() {
+			from("jetty:http://127.0.0.1:2121/eventz/simulator/").process(new Processor() {
 				@Override
 				public void process(final Exchange exchange) throws Exception {
 					System.out.println("Invoked timer at " + new Date() + " and has body "
@@ -78,7 +79,7 @@ public class EventzSimulator {
 					exchange.getIn().setBody(data, String.class);
 
 				}
-			}).to("http4://0.0.0.0:2121/eventz/B1/");
+			}).to("http4://127.0.0.1:2121/eventz/B1/");
 		}
 	}
 

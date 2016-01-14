@@ -57,7 +57,9 @@ public class EventAlarm implements Processor {
 
 		alarm.setDate(Calendar.getInstance());
 		alarm.setFormula(rule.getFormula());
-		alarm.setProducerData(data);
+		alarm.setType(rule.getType());
+		alarm.setDescription(
+				String.format("Dado[%d] de %s[%s].", data.getId(), data.getProducer().getName(), data.getData()));
 		alarm.setLevel(alarmLevel);
 
 		alarmService.save(alarm);

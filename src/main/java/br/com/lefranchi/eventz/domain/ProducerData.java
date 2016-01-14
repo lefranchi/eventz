@@ -1,5 +1,6 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class ProducerData extends AbstractPersistable<Long> {
 
 	@Override
 	public String toString() {
-		return ReflectionToStringBuilder.toString(this);
+		return ReflectionToStringBuilder.toStringExclude(this, Arrays.asList("dataValues"));
 	}
 
 }

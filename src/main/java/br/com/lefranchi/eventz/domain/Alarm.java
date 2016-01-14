@@ -2,7 +2,6 @@ package br.com.lefranchi.eventz.domain;
 
 import java.util.Calendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,11 +34,8 @@ public class Alarm extends AbstractPersistable<Long> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar date;
 
-	/**
-	 * Dado que gerou o alarme.
-	 */
-	@ManyToOne(optional = false, cascade = { CascadeType.PERSIST })
-	private ProducerData producerData;
+	@Column(nullable = false)
+	private String description;
 
 	/**
 	 * Tipo de Formula.
@@ -68,14 +64,6 @@ public class Alarm extends AbstractPersistable<Long> {
 		this.date = date;
 	}
 
-	public ProducerData getProducerData() {
-		return producerData;
-	}
-
-	public void setProducerData(final ProducerData producerData) {
-		this.producerData = producerData;
-	}
-
 	public FormulaType getType() {
 		return type;
 	}
@@ -98,6 +86,14 @@ public class Alarm extends AbstractPersistable<Long> {
 
 	public void setLevel(final AlarmLevel level) {
 		this.level = level;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	@Override
