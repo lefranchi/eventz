@@ -50,7 +50,6 @@ public class EventAlarm implements Processor {
 
 		LOGGER.info(String.format("Criando alarme para %s", data));
 
-		// TODO: TESTAR SE FOI CONFIGURADA PROPRIEDADE
 		final AlarmLevel alarmLevel = alarmLevelService
 				.findById(Long.valueOf(getPropertyValue(eventProperties, "alarmLevel")));
 

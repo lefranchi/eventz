@@ -1,6 +1,7 @@
 package br.com.lefranchi.eventz.simulator;
 
 import java.util.Date;
+import java.util.Random;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -8,8 +9,6 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.main.Main;
 import org.apache.camel.main.MainListenerSupport;
 import org.apache.camel.main.MainSupport;
-
-import br.com.lefranchi.eventz.testutils.ProducerDataTestUtils;
 
 /**
  * Simulador que deve gerar dados de entrada para os produtores.
@@ -62,8 +61,22 @@ public class EventzSimulator {
 			from("timer:foo?delay=12000").process(new Processor() {
 				@Override
 				public void process(final Exchange exchange) throws Exception {
-					System.out.println("Invoked timer at " + new Date());
-					exchange.getIn().setBody(ProducerDataTestUtils.PRODUCER_DATA, String.class);
+
+					// id;name;year;active;content
+					// 88745;LEANDRO FRANCHI;1979;0;25.4
+					final String dataSample = "%d;LEANDRO FRANCHI;%d;%d;%f";
+
+					final int id = new Random().nextInt((90000 - 10000) + 1) + 10000;
+					final int year = new Random().nextInt((2015 - 1000) + 1) + 1000;
+					final int active = new Random().nextInt((1 - 0) + 1) + 0;
+					final float content = new Random().nextFloat();
+
+					final String data = String.format(dataSample, id, year, active, content);
+
+					System.out.println("Invoked timer at " + new Date() + " Data=" + data);
+
+					exchange.getIn().setBody(data, String.class);
+
 				}
 			}).to("http4://0.0.0.0:2121/eventz/B1/");
 		}
@@ -73,12 +86,12 @@ public class EventzSimulator {
 
 		@Override
 		public void afterStart(final MainSupport main) {
-			System.out.println("MainExample with Camel is now started!");
+			System.out.println("Eventz Simulator iniciado!");
 		}
 
 		@Override
 		public void beforeStop(final MainSupport main) {
-			System.out.println("MainExample with Camel is now being stopped!");
+			System.out.println("Eventz Simulator Finalizado!");
 		}
 	}
 

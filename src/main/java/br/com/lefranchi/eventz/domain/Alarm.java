@@ -2,6 +2,7 @@ package br.com.lefranchi.eventz.domain;
 
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -37,7 +38,7 @@ public class Alarm extends AbstractPersistable<Long> {
 	/**
 	 * Dado que gerou o alarme.
 	 */
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = { CascadeType.PERSIST })
 	private ProducerData producerData;
 
 	/**
