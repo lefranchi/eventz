@@ -1,5 +1,5 @@
 /***
-Metronic AngularJS App Main Script
+Eventz App Main Script
 ***/
 
 /* Metronic App */
@@ -148,7 +148,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('dashboard', {
             url: "/dashboard.html",
             templateUrl: "views/dashboard.html",
-            data: {pageTitle: 'Eventz Dashboard'},
+            data: {pageTitle: 'Dashboard'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -173,7 +173,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('event', {
             url: "/event.html",
             templateUrl: "views/event.html",
-            data: {pageTitle: 'Eventz - Evento'},
+            data: {pageTitle: 'Eventos'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -198,7 +198,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('inputmode', {
             url: "/inputmode.html",
             templateUrl: "views/inputmode.html",
-            data: {pageTitle: 'Eventz - Meio de Entrada'},
+            data: {pageTitle: 'Meios de Entrada'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -223,7 +223,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('metadata', {
             url: "/metadata.html",
             templateUrl: "views/metadata.html",
-            data: {pageTitle: 'Eventz - Metadado'},
+            data: {pageTitle: 'Metadados'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -248,7 +248,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('producergroup', {
             url: "/producergroup.html",
             templateUrl: "views/producergroup.html",
-            data: {pageTitle: 'Eventz - Grupo de Produtor'},
+            data: {pageTitle: 'Grupo de Produtores'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -273,7 +273,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('producer', {
             url: "/producer.html",
             templateUrl: "views/producer.html",
-            data: {pageTitle: 'Eventz - Produtor'},
+            data: {pageTitle: 'Produtores'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -298,7 +298,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('rule', {
             url: "/rule.html",
             templateUrl: "views/rule.html",
-            data: {pageTitle: 'Eventz - Regra'},
+            data: {pageTitle: 'Regras'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
