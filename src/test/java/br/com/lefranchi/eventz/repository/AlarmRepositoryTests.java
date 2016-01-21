@@ -18,9 +18,7 @@ import br.com.lefranchi.eventz.domain.Alarm;
 import br.com.lefranchi.eventz.domain.AlarmLevel;
 import br.com.lefranchi.eventz.domain.FormulaType;
 import br.com.lefranchi.eventz.domain.Producer;
-import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.testutils.AlarmLevelTestUtils;
-import br.com.lefranchi.eventz.testutils.ProducerDataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerMetadataTestUtils;
 import br.com.lefranchi.eventz.testutils.ProducerTestUtils;
 
@@ -37,10 +35,6 @@ public class AlarmRepositoryTests {
 	ProducerMetadataRepository producerMetadataRepository;
 
 	@Autowired
-	ProducerDataRepository producerDataRepository;
-	ProducerData producerData;
-
-	@Autowired
 	AlarmLevelRepository alarmLevelRepository;
 	AlarmLevel alarmLevel;
 
@@ -55,12 +49,10 @@ public class AlarmRepositoryTests {
 		producer.setMetadata(producerMetadataRepository.save(ProducerMetadataTestUtils.newProducerMetadata()));
 		producer = producerRepository.save(producer);
 
-		producerData = producerDataRepository.save(ProducerDataTestUtils.newProducerData(producer));
-
 		alarmLevel = alarmLevelRepository.save(AlarmLevelTestUtils.newAlarmLevel());
 
 		alarm = new Alarm();
-		alarm.setProducerData(producerData);
+		alarm.setDescription("Description");
 		alarm.setDate(Calendar.getInstance());
 		alarm.setFormula("iadade > 10");
 		alarm.setType(FormulaType.JEXL);
@@ -74,7 +66,7 @@ public class AlarmRepositoryTests {
 		Alarm alarm = new Alarm();
 
 		alarm = repository.save(alarm);
-		alarm.setProducerData(null);
+		alarm.setDescription(null);
 		alarm.setDate(null);
 		alarm.setFormula(null);
 		alarm.setType(null);
@@ -83,9 +75,9 @@ public class AlarmRepositoryTests {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void testAlarmIntegrityProducerData() {
+	public void testAlarmIntegrityDescription() {
 
-		alarm.setProducerData(null);
+		alarm.setDescription(null);
 
 		alarm = repository.save(alarm);
 

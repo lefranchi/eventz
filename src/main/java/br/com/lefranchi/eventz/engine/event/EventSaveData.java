@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import br.com.lefranchi.eventz.domain.ProducerData;
 import br.com.lefranchi.eventz.engine.RuleProcessorVO;
 import br.com.lefranchi.eventz.repository.ProducerDataRepository;
+import br.com.lefranchi.eventz.util.DataValueUtils;
 
 @Component
 public class EventSaveData implements Processor {
@@ -26,6 +27,8 @@ public class EventSaveData implements Processor {
 	public void process(final Exchange exchange) throws Exception {
 
 		final ProducerData data = exchange.getIn().getBody(RuleProcessorVO.class).getData();
+
+		DataValueUtils.extractDataValues(data);
 
 		producerDataReporitory.save(data);
 

@@ -29,9 +29,9 @@ public class DelimitedUtils {
 			switch (dataFieldMetadata.getType()) {
 			case NUMBER:
 				try {
-					o = Float.valueOf(vl);
+					o = Float.valueOf(vl.replace(',', '.'));
 				} catch (final NumberFormatException e) {
-					o = Long.valueOf(vl);
+					o = Long.valueOf(vl.replace(',', '.'));
 				}
 				break;
 

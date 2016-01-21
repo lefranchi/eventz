@@ -1,6 +1,7 @@
 package br.com.lefranchi.eventz.domain;
 
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -50,7 +52,8 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 	 * Campos contidos no dado.
 	 */
 	@OneToMany(mappedBy = "producerMetadata", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<DataFieldMetadata> fields;
+	@OrderBy("order ASC")
+	private SortedSet<DataFieldMetadata> fields = new TreeSet<>();
 
 	public String getSampleData() {
 		return sampleData;
@@ -68,11 +71,11 @@ public class ProducerMetadata extends AbstractPersistable<Long> {
 		this.dataType = dataType;
 	}
 
-	public Set<DataFieldMetadata> getFields() {
+	public SortedSet<DataFieldMetadata> getFields() {
 		return fields;
 	}
 
-	public void setFields(final Set<DataFieldMetadata> fields) {
+	public void setFields(final SortedSet<DataFieldMetadata> fields) {
 		this.fields = fields;
 	}
 

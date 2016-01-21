@@ -62,7 +62,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 			final OnExceptionDefinition exceptionDefinition = onException(RuntimeException.class);
 
-			final MulticastDefinition multicastDefinition = exceptionDefinition.multicast().parallelProcessing();
+			final MulticastDefinition multicastDefinition = exceptionDefinition.multicast();
 
 			eventsOnException.forEach((eventToProcess) -> {
 
@@ -113,7 +113,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		if (rules != null && rules.size() > 0) {
 
-			final MulticastDefinition multicastDefinition = routeDefinition.multicast().parallelProcessing();
+			final MulticastDefinition multicastDefinition = routeDefinition.multicast();
 
 			rules.forEach((rule) -> {
 
@@ -161,7 +161,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 		if (eventsOnAlways != null && eventsOnAlways.size() > 0) {
 
 			if (eventsOnAlways.size() > 1)
-				routeDefinition.multicast().parallelProcessing();
+				routeDefinition.multicast();
 
 			for (final EventToProcess eventToProcess : eventsOnAlways) {
 				// eventsOnAlways.forEach((eventToProcess) -> {
@@ -239,7 +239,7 @@ public class InternalConsumerRouteBuilder extends RouteBuilder {
 
 		if (eventsToProcess.size() > 0) {
 
-			final MulticastDefinition multicastDefinition = pipelineDefinition.multicast().parallelProcessing();
+			final MulticastDefinition multicastDefinition = pipelineDefinition.multicast();
 
 			eventsToProcess.forEach((eventToProcess) -> {
 
