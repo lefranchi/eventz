@@ -1,14 +1,14 @@
 /***
-Metronic AngularJS App Main Script
+Eventz App Main Script
 ***/
 
 /* Metronic App */
 var EventzApp = angular.module("EventzApp", [
-    "ui.router", 
-    "ui.bootstrap", 
-    "oc.lazyLoad",  
+    "ui.router",
+    "ui.bootstrap",
+    "oc.lazyLoad",
     "ngSanitize"
-]); 
+]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 EventzApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -90,13 +90,13 @@ EventzApp.factory('settings', ['$rootScope', function($rootScope) {
 EventzApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.$on('$viewContentLoaded', function() {
         //App.initComponents(); // init core components
-        //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
+        //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive
     });
 }]);
 
 /***
 Layout Partials.
-By default the partials are loaded through AngularJS ng-include directive. In case they loaded in server side(e.g: PHP include function) then below partial 
+By default the partials are loaded through AngularJS ng-include directive. In case they loaded in server side(e.g: PHP include function) then below partial
 initialization can be disabled and Layout.init() should be called on page load complete as explained above.
 ***/
 
@@ -115,16 +115,16 @@ EventzApp.controller('SidebarController', ['$scope', function($scope) {
 }]);
 
 /* Setup Layout Part - Quick Sidebar */
-EventzApp.controller('QuickSidebarController', ['$scope', function($scope) {    
+EventzApp.controller('QuickSidebarController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
        setTimeout(function(){
-            QuickSidebar.init(); // init quick sidebar        
+            QuickSidebar.init(); // init quick sidebar
         }, 2000)
     });
 }]);
 
 /* Setup Layout Part - Theme Panel */
-EventzApp.controller('ThemePanelController', ['$scope', function($scope) {    
+EventzApp.controller('ThemePanelController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Demo.init(); // init theme panel
     });
@@ -140,15 +140,15 @@ EventzApp.controller('FooterController', ['$scope', function($scope) {
 /* Setup Rounting For All Pages */
 EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/dashboard.html");  
-    
+    $urlRouterProvider.otherwise("/dashboard.html");
+
     $stateProvider
 
         // Dashboard
         .state('dashboard', {
             url: "/dashboard.html",
-            templateUrl: "views/dashboard.html",            
-            data: {pageTitle: 'Eventz Dashboard'},
+            templateUrl: "views/dashboard.html",
+            data: {pageTitle: 'Dashboard'},
             controller: "DashboardController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -156,18 +156,169 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                         name: 'EventzApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            '../assets/global/plugins/morris/morris.css',                            
+                            '../assets/global/plugins/morris/morris.css',
                             '../assets/global/plugins/morris/morris.min.js',
-                            '../assets/global/plugins/morris/raphael-min.js',                            
+                            '../assets/global/plugins/morris/raphael-min.js',
                             '../assets/global/plugins/jquery.sparkline.min.js',
 
                             '../assets/pages/scripts/dashboard.min.js',
                             'js/controllers/DashboardController.js',
-                        ] 
+                        ]
                     });
                 }]
             }
         })
+
+        // CRUD Event
+        .state('event', {
+            url: "/event.html",
+            templateUrl: "views/event.html",
+            data: {pageTitle: 'Eventos'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
+         // CRUD InputMode
+        .state('inputmode', {
+            url: "/inputmode.html",
+            templateUrl: "views/inputmode.html",
+            data: {pageTitle: 'Meios de Entrada'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
+        // CRUD Metadata
+        .state('metadata', {
+            url: "/metadata.html",
+            templateUrl: "views/metadata.html",
+            data: {pageTitle: 'Metadados'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
+        // CRUD Producer Group
+        .state('producergroup', {
+            url: "/producergroup.html",
+            templateUrl: "views/producergroup.html",
+            data: {pageTitle: 'Grupo de Produtores'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
+        // CRUD Producer
+        .state('producer', {
+            url: "/producer.html",
+            templateUrl: "views/producer.html",
+            data: {pageTitle: 'Produtores'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
+        // CRUD Rule
+        .state('rule', {
+            url: "/rule.html",
+            templateUrl: "views/rule.html",
+            data: {pageTitle: 'Regras'},
+            controller: "DashboardController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'EventzApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/global/plugins/morris/morris.css',
+                            '../assets/global/plugins/morris/morris.min.js',
+                            '../assets/global/plugins/morris/raphael-min.js',
+                            '../assets/global/plugins/jquery.sparkline.min.js',
+
+                            '../assets/pages/scripts/dashboard.min.js',
+                            'js/controllers/DashboardController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+
 
         // AngularJS plugins
         .state('fileupload', {
@@ -181,7 +332,7 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                         name: 'angularFileUpload',
                         files: [
                             '../assets/global/plugins/angularjs/plugins/angular-file-upload/angular-file-upload.min.js',
-                        ] 
+                        ]
                     }, {
                         name: 'EventzApp',
                         files: [
@@ -206,12 +357,12 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                         files: [
                             '../assets/global/plugins/angularjs/plugins/ui-select/select.min.css',
                             '../assets/global/plugins/angularjs/plugins/ui-select/select.min.js'
-                        ] 
+                        ]
                     }, {
                         name: 'EventzApp',
                         files: [
                             'js/controllers/UISelectController.js'
-                        ] 
+                        ]
                     }]);
                 }]
             }
@@ -229,9 +380,9 @@ EventzApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                         name: 'EventzApp',
                         files: [
                             'js/controllers/GeneralPageController.js'
-                        ] 
+                        ]
                     }]);
-                }] 
+                }]
             }
         })
 
