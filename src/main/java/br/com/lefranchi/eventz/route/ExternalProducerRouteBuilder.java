@@ -38,7 +38,7 @@ public class ExternalProducerRouteBuilder extends RouteBuilder {
 		final ProducerInputMethod producerInputMethod = extractProducerInputMethod();
 
 		final StringBuilder fromClause = new StringBuilder(producerInputMethod.getInputMethod().getComponentName()
-				.replaceAll("\\bVAR\\b", producer.getName().replaceAll("\\s+", ""))).append("?");
+				.replaceAll("\\bINPUT_METHOD_COMMAND\\b", producer.getInputMethodCommand())).append("?");
 
 		if (producerInputMethod.getProperties() != null) {
 			producerInputMethod.getProperties().forEach((key, value) -> {

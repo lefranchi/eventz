@@ -69,6 +69,12 @@ public class Producer extends AbstractPersistable<Long> {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private ProducerInputMethod inputMethod;
 
+	/**
+	 * Comando executado no Metodo de Entrada.
+	 */
+	@Column(unique = true)
+	private String inputMethodCommand;
+
 	public String getName() {
 		return name;
 	}
@@ -123,6 +129,14 @@ public class Producer extends AbstractPersistable<Long> {
 
 	public void setInputMethod(final ProducerInputMethod inputMethod) {
 		this.inputMethod = inputMethod;
+	}
+
+	public String getInputMethodCommand() {
+		return inputMethodCommand;
+	}
+
+	public void setInputMethodCommand(final String inputMethodCommand) {
+		this.inputMethodCommand = inputMethodCommand;
 	}
 
 	@Override

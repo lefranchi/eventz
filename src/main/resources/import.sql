@@ -14,7 +14,7 @@ INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('Save Data', 'eventSa
 INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('Alarm', 'eventAlarm');
 INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'alarmLevel','ALARM_LEVEL',3);
 
-INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('SMS', 'eventSMS');
+INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('SMS', 'eventSms');
 INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'numeroChip','NR_CHIP',4);
 INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'formatoMensagem','MESSAGE_FORMAT',4);
 ------------------------------------------------------------------------------------------------------------
@@ -24,20 +24,23 @@ INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES 
 ------------------------------------------------------------------------------------------------------------
 
 -- HTTP
-INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('jetty:http://0.0.0.0:2121/eventz/VAR','Leitor de mensagens usado no simulador.','Receptor HTTP.');
+INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('jetty:http://0.0.0.0:2121/eventz/INPUT_METHOD_COMMAND','Leitor de mensagens usado no simulador.','Receptor HTTP.');
+INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
 
 -- ARQUIVO
--- INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('file:/VAR','Leitor de arquivos.','File TMP');
+-- INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('file:/INPUT_METHOD_COMMAND','Leitor de arquivos.','File TMP');
 -- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delay');
 -- INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (1,'delete');
-
---SQL
-INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('sql:VAR','Leitor de objetos no banco de dados.','Receptor de Banco de dados.');
-
-INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
-INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (2);
 -- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'6000','delay');
 -- INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (1,'false','delete');
+
+--SQL
+INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('jpa:INPUT_METHOD_COMMAND','Leitor de objetos no banco de dados.','Receptor de Banco de dados.');
+INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (2,'consumer.namedQuery');
+INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (2);
+INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (2,'listAllNotProcessed','consumer.namedQuery');
+INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (2,'5000','consumer.delay');
+
 
 ------------------------------------------------------------------------------------------------------------
 -- Metadados de Produtores
@@ -88,12 +91,12 @@ INSERT INTO `eventz`.`producer_group_events_on_always`(`producer_group`,`events_
 -- Produtores
 ------------------------------------------------------------------------------------------------------------
 -- Caminhoes
-INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`) VALUES ('C1', 1, 1);
-INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`) VALUES ('C2', 1, 1);
-INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`) VALUES ('C3', 1, 1);
+INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('C1', 1, 1, 'C1');
+INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('C2', 1, 1, 'C2');
+INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('C3', 1, 1, 'C2');
 
 -- Notas Fiscais
-INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`) VALUES ('NFs', 2, 2);
+INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('NFs', 2, 2, 'br.com.lefranchi.eventz.domain.Nf');
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
