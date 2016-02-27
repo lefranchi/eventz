@@ -123,3 +123,8 @@ INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (2, 4
 INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`properties_key`) VALUES (4, '3', 1);
 ------------------------------------------------------------------------------------------------------------
 
+
+------------------------------------------------------------------------------------------------------------
+-- Caminhões
+------------------------------------------------------------------------------------------------------------
+INSERT INTO `eventz`.`caminhao` (`identificador`) VALUES ('CAMINHAO-01');

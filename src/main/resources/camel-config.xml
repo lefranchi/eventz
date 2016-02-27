@@ -8,27 +8,24 @@
 
 	<camelContext xmlns="http://camel.apache.org/schema/spring">
 
-		<!-- 	
-		<route id="timerToInRoute">
-			<from uri="timer:foo?period=1s" />
-			<transform>
-				<simple>Message at ${date:now:yyyy-MM-dd HH:mm:ss}</simple>
-			</transform>
-			<to uri="activemq:queue:inbox" />
-		</route>
+		<!-- <route id="timerToInRoute"> <from uri="timer:foo?period=1s" /> <transform> 
+			<simple>Message at ${date:now:yyyy-MM-dd HH:mm:ss}</simple> </transform> 
+			<to uri="activemq:queue:inbox" /> </route> <route id="inToOutRoute"> <from 
+			uri="activemq:queue:inbox" /> <log message="Routing message from inbox to 
+			outbox queue with data ${body}" /> <to uri="activemq:queue:outbox" /> </route> -->
 
-		<route id="inToOutRoute">
-			<from uri="activemq:queue:inbox" />
-			<log message="Routing message from inbox to outbox queue with data ${body}" />
-			<to uri="activemq:queue:outbox" />
-		</route>
- 		-->
- 		
 	</camelContext>
 
-	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
 		<property name="brokerURL"
 			value="vm://eventsBroker?create=false&amp;waitForStart=5000" />
+		<property name="trustAllPackages" value="true" />
+	</bean>
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="configuration" ref="jmsConfig" />
 	</bean>
 
 </beans>

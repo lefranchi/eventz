@@ -33,6 +33,8 @@ public class EventSms implements Processor {
 		// (Map<EventProperty, String>) exchange.getIn()
 		// .getHeader("eventProperties");
 
+		LOGGER.info("Processando SMS...");
+
 	}
 
 	// TODO CRIAR EM UTILS
