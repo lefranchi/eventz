@@ -8,6 +8,6 @@ package br.com.lefranchi.eventz.domain;
  */
 public enum ProducerDataType {
 
-	DELIMITED, JSON, XML;
+	DELIMITED, JSON, XML, DB;
 
 }
