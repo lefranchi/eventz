@@ -9,9 +9,9 @@ angular.module('eventz', [ 'ngRoute' ])
       templateUrl : 'login.html',
       controller : 'navigation',
       controllerAs: 'controller'
-    }).when('/caminhao', {
-        templateUrl : 'caminhao.html',
-        controller : 'caminhao',
+    }).when('/caminhoes', {
+        templateUrl : 'caminhoes.html',
+        controller : 'caminhoes',
         controllerAs: 'controller'
     }).otherwise('/');
 
@@ -72,19 +72,27 @@ angular.module('eventz', [ 'ngRoute' ])
 	};
 
 })
-.controller('caminhao',
+.controller('caminhoes',
 
 	function($rootScope, $scope, $http, $location) {
 
-	    $http({method: 'GET', url: '/caminhao?'})
-	      .success(function(data) {
-	    	  
-	        $scope.caminhoes = data.caminhao;
-
-	        console.log(data);    
-	      });
-		
+		$scope.list = function() {
+	
+			$http({method: 'GET', url: '/caminhoes?'}).success(function(data) {
+		        $scope.caminhoes = data._embedded.caminhoes;
+			});
+		    
+		}
+	 
+	    $scope.save = function(caminhao) {
+	    	
+			$http.post('/caminhoes', $scope.caminhao).success(function(data) {
+		        $scope.list();
+			});
+	    	
+	    }
 	    
+	    $scope.list();
 	    
 	}
 

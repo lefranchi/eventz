@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import br.com.lefranchi.eventz.domain.Caminhao;
 
-@RepositoryRestResource(collectionResourceRel = "caminhao", path = "caminhao")
+@RepositoryRestResource(collectionResourceRel = "caminhoes", path = "caminhoes")
 public interface CaminhaoRepository extends CrudRepository<Caminhao, Long> {
 
 }

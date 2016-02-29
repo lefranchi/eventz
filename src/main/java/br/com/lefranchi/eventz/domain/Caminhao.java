@@ -17,12 +17,23 @@ public class Caminhao extends AbstractPersistable<Long> {
 	@Column(unique = true)
 	private String identificador;
 
+	@Column(unique = true)
+	private String placa;
+
 	public String getIdentificador() {
 		return identificador;
 	}
 
 	public void setIdentificador(final String identificador) {
 		this.identificador = identificador;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(final String placa) {
+		this.placa = placa;
 	}
 
 	@Override
