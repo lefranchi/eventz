@@ -9,6 +9,10 @@ angular.module('eventz', [ 'ngRoute' ])
       templateUrl : 'login.html',
       controller : 'navigation',
       controllerAs: 'controller'
+    }).when('/caminhao', {
+        templateUrl : 'caminhao.html',
+        controller : 'caminhao',
+        controllerAs: 'controller'
     }).otherwise('/');
 
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
@@ -66,5 +70,22 @@ angular.module('eventz', [ 'ngRoute' ])
 	    $location.path("/");
 	  });
 	};
-	
-});
+
+})
+.controller('caminhao',
+
+	function($rootScope, $scope, $http, $location) {
+
+	    $http({method: 'GET', url: '/caminhao?'})
+	      .success(function(data) {
+	    	  
+	        $scope.caminhoes = data.caminhao;
+
+	        console.log(data);    
+	      });
+		
+	    
+	    
+	}
+
+);
