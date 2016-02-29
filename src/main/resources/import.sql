@@ -37,9 +37,11 @@ INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (1);
 --SQL
 INSERT INTO `eventz`.`input_method`(`component_name`,`description`,`name`) VALUES ('jpa:INPUT_METHOD_COMMAND','Leitor de objetos no banco de dados.','Receptor de Banco de dados.');
 INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (2,'consumer.namedQuery');
+INSERT INTO `eventz`.`input_method_properties`(`input_method`,`properties`) VALUES (2,'consumeDelete');
 INSERT INTO `eventz`.`producer_input_method`(`input_method`) VALUES (2);
 INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (2,'listAllNotProcessed','consumer.namedQuery');
 INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (2,'5000','consumer.delay');
+INSERT INTO `eventz`.`producer_input_method_properties`(`producer_input_method`,`value`,`property`) VALUES (2,'false','consumeDelete');
 
 
 ------------------------------------------------------------------------------------------------------------

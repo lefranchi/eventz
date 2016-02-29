@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.component.jpa.Consumed;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -33,6 +35,11 @@ public class Nf extends AbstractPersistable<Long> {
 
 	@Column(nullable = false)
 	private Boolean processed = Boolean.FALSE;
+
+	@Consumed
+	public void executeConsumed(final Exchange exchange) {
+		this.setProcessed(Boolean.TRUE);
+	}
 
 	public Caminhao getCaminhao() {
 		return caminhao;
