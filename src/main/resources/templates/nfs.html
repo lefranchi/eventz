@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Eventz</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(nfs)}">
+        <h2>NF List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Caminhão</th>
+                <th>Lote</th>
+                <th>NF</th>
+                <th>Volume</th>
+                <th>Enviado</th>
+                <th>View</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="nf : ${nfs}">
+                <td th:text="${nf.id}"><a href="/nf/${nf.id}">Id</a></td>
+                <td th:text="${nf.truck.identification}">Caminhão</td>
+                <td th:text="${nf.lote}">Lote</td>
+                <td th:text="${nf.nf}">NF</td>
+                <td th:text="${nf.volume}">Volume</td>
+                <td th:text="${nf.processed}">Enviado</td>
+                <td><a th:href="${'/nf/' + nf.id}">View</a></td>
+                <td><a th:href="${'/nf/edit/' + nf.id}">Edit</a></td>
+                <td><a th:href="${'/nf/delete/' + nf.id}">Delete</a></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

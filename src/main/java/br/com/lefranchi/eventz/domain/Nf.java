@@ -21,8 +21,8 @@ public class Nf extends AbstractPersistable<Long> {
 	private static final long serialVersionUID = 7474141683881464425L;
 
 	@ManyToOne
-	@JoinColumn(name = "caminhao_id")
-	private Truck caminhao;
+	@JoinColumn(name = "truck_id")
+	private Truck truck;
 
 	@Column(nullable = false)
 	private Integer lote;
@@ -41,12 +41,12 @@ public class Nf extends AbstractPersistable<Long> {
 		this.setProcessed(Boolean.TRUE);
 	}
 
-	public Truck getCaminhao() {
-		return caminhao;
+	public Truck getTruck() {
+		return truck;
 	}
 
-	public void setCaminhao(final Truck caminhao) {
-		this.caminhao = caminhao;
+	public void setTruck(final Truck truck) {
+		this.truck = truck;
 	}
 
 	public Integer getLote() {
