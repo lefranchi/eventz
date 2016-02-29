@@ -22,7 +22,7 @@ public class Nf extends AbstractPersistable<Long> {
 
 	@ManyToOne
 	@JoinColumn(name = "caminhao_id")
-	private Caminhao caminhao;
+	private Truck caminhao;
 
 	@Column(nullable = false)
 	private Integer lote;
@@ -41,11 +41,11 @@ public class Nf extends AbstractPersistable<Long> {
 		this.setProcessed(Boolean.TRUE);
 	}
 
-	public Caminhao getCaminhao() {
+	public Truck getCaminhao() {
 		return caminhao;
 	}
 
-	public void setCaminhao(final Caminhao caminhao) {
+	public void setCaminhao(final Truck caminhao) {
 		this.caminhao = caminhao;
 	}
 

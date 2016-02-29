@@ -129,6 +129,6 @@ INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`p
 ------------------------------------------------------------------------------------------------------------
 -- Caminhões
 ------------------------------------------------------------------------------------------------------------
-INSERT INTO `eventz`.`caminhao` (`identificador`, `placa`) VALUES ('CAMINHAO-01', 'FRE-4677');
-INSERT INTO `eventz`.`caminhao` (`identificador`, `placa`) VALUES ('CAMINHAO-02', 'YTR-0274');
-INSERT INTO `eventz`.`caminhao` (`identificador`, `placa`) VALUES ('CAMINHAO-03', 'HFG-7563');
+INSERT INTO `eventz`.`truck` (`identification`, `plate`) VALUES ('CAMINHAO-01', 'FRE-4677');
+INSERT INTO `eventz`.`truck` (`identification`, `plate`) VALUES ('CAMINHAO-02', 'YTR-0274');
+INSERT INTO `eventz`.`truck` (`identification`, `plate`) VALUES ('CAMINHAO-03', 'HFG-7563');
