@@ -1,8 +1,11 @@
 package br.com.lefranchi.eventz.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,7 +44,12 @@ public class TruckController {
 	}
 
 	@RequestMapping(value = "truck", method = RequestMethod.POST)
-	public String saveTruck(final Truck truck) {
+	public String saveTruck(@Valid final Truck truck, final BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			return "truckform";
+		}
+
 		truckRepository.save(truck);
 		return "redirect:/truck/" + truck.getId();
 	}

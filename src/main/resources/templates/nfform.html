@@ -21,6 +21,7 @@
 					<select th:field="*{truck}">
 	              		<option th:each="truck : ${allTrucks}" th:value="${truck.id}" th:text="${truck.identification}">Caminhão</option>
 		            </select>                    
+                    <span th:if="${#fields.hasErrors('truck')}" th:errors="*{truck}">Truck Error</span>
                     
                 </div>
             </div>
@@ -28,18 +29,21 @@
                 <label class="col-sm-2 control-label">Lote:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" th:field="*{lote}"/>
+                    <span th:if="${#fields.hasErrors('lote')}" th:errors="*{lote}">Lote Error</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">NF:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" th:field="*{nf}"/>
+                    <span th:if="${#fields.hasErrors('nf')}" th:errors="*{nf}">NF Error</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Volume:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" th:field="*{volume}"/>
+                    <span th:if="${#fields.hasErrors('volume')}" th:errors="*{volume}">Volume Error</span>
                 </div>
             </div>
             <div class="row">

@@ -1,10 +1,15 @@
 package br.com.lefranchi.eventz.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.component.jpa.Consumed;
@@ -20,18 +25,25 @@ public class Nf extends AbstractPersistable<Long> {
 	 */
 	private static final long serialVersionUID = 7474141683881464425L;
 
+	@NotNull(message = "Caminhão não pode estar vazio.")
 	@ManyToOne
 	@JoinColumn(name = "truck_id")
 	private Truck truck;
 
+	@NotNull(message = "Lote não pode estar vazio.")
+	@Min(value = 1, message = "Lote não pode ser 0.")
 	@Column(nullable = false)
 	private Integer lote;
 
+	@NotNull(message = "NF não pode estar vazia.")
+	@Min(value = 1, message = "NF não pode ser 0.")
 	@Column(nullable = false)
 	private Integer nf;
 
+	@NotNull(message = "Volume não pode estar vazio.")
+	@DecimalMin(value = "1.00", message = "Volume não pode ser 0.")
 	@Column(nullable = false)
-	private float volume;
+	private BigDecimal volume;
 
 	@Column(nullable = false)
 	private Boolean processed = Boolean.FALSE;
@@ -65,11 +77,11 @@ public class Nf extends AbstractPersistable<Long> {
 		this.nf = nf;
 	}
 
-	public float getVolume() {
+	public BigDecimal getVolume() {
 		return volume;
 	}
 
-	public void setVolume(final float volume) {
+	public void setVolume(final BigDecimal volume) {
 		this.volume = volume;
 	}
 
