@@ -2,24 +2,85 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Spring Security Example </title>
+        <title>Eventz</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.light_green-green.min.css" />
+		<script src="https://code.getmdl.io/1.1.1/material.min.js"></script>
     </head>
-    <body>
     
-         <img src="../../public/images/logo.png" width="400"
-              th:src="@{/images/logo.png}"/>
-    
-    
-        <div th:if="${param.error}">
-            Invalid username and password.
-        </div>
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
-        <form th:action="@{/login}" method="post">
-            <div><label> User Name : <input type="text" name="username"/> </label></div>
-            <div><label> Password: <input type="password" name="password"/> </label></div>
-            <div><input type="submit" value="Sign In"/></div>
-        </form>
-    </body>
-</html>
+<style>
+	.demo-layout-transparent {
+	  background: url('images/bg.jpg') center / cover;
+	}
+	.demo-layout-transparent .mdl-layout__header,
+	.demo-layout-transparent .mdl-layout__drawer-button {
+	  /* This background is dark, so we set text to white. Use 87% black instead if
+	     your background is light. */
+	  color: white;
+	}
+
+	.mdl-card__media {
+	    margin: 0;
+	}
+
+	.mdl-card__media > img {
+	    max-width: 100%;
+	}
+	
+	input:-webkit-autofill { -webkit-box-shadow:0 0 0 500px white inset; }
+	
+</style> 
+   
+<body>
+	<form th:action="@{/login}" method="post" autocomplete="off">
+		
+		<input style="display:none;" type="text" name="somefakename" />
+		<input style="display:none;" type="password" name="anotherfakename" />
+		
+		<div class="demo-layout-transparent mdl-layout mdl-js-layout">
+			<div class="mdl-grid mdl-cell--12-col">
+		      <div class="mdl-layout-spacer"></div>
+			  <div class="mdl-cell mdl-cell--4-col">
+				<div class="mdl-card mdl-shadow--2dp">
+				  <figure class="mdl-card__media">
+				    <img src="images/logo.png" alt="" />
+				  </figure>
+				  <div class="mdl-card__title">
+				    <h1 class="mdl-card__title-text">Sistema Control-Liq</h1>
+				  </div>
+			        <div th:if="${param.error}">
+			            Usuário ou senha inválidos.
+			        </div>
+			        <!-- 
+			        <div th:if="${param.logout}">
+			            You have been logged out.
+			        </div>
+			         -->
+				  <main class="mdl-layout__content">
+				  	  <div class="page-content" align="center">
+						  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						    <input class="mdl-textfield__input" type="text" id="username" name="username"/>
+						    <label class="mdl-textfield__label" for="username">Usuário</label>
+						  </div>
+						  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						    <input class="mdl-textfield__input" type="password" id="password" name="password"/>
+						    <label class="mdl-textfield__label" for="password">Senha</label>
+						  </div>
+						  <p>
+						      <a href="#">Esqueceu a senha?</a>
+						  </p>
+						  <div class="mdl-card__actions mdl-card--border" align="right">
+							  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Login</button>	
+						  </div>
+					  </div>
+				  </main>
+				</div>
+			  </div>
+			  <div class="mdl-layout-spacer"></div>
+			</div>
+		</div>
+	</form>
+	
+</body>
+</html>    
