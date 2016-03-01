@@ -13,7 +13,6 @@
         <h2>NF List</h2>
         <table class="table table-striped">
             <tr>
-                <th>Id</th>
                 <th>Caminhão</th>
                 <th>Lote</th>
                 <th>NF</th>
@@ -24,7 +23,6 @@
                 <th>Delete</th>
             </tr>
             <tr th:each="nf : ${nfs}">
-                <td th:text="${nf.id}"><a href="/nf/${nf.id}">Id</a></td>
                 <td th:text="${nf.truck.identification}">Caminhão</td>
                 <td th:text="${nf.lote}">Lote</td>
                 <td th:text="${nf.nf}">NF</td>

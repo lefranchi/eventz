@@ -46,6 +46,11 @@ public class Truck extends AbstractPersistable<Long> {
 	}
 
 	@Override
+	public void setId(final Long id) {
+		super.setId(id);
+	}
+
+	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
 	}

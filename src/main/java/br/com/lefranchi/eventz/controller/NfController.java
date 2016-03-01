@@ -51,7 +51,7 @@ public class NfController {
 	}
 
 	@RequestMapping("nf/new")
-	public String newProduct(final Model model) {
+	public String newNf(final Model model) {
 		model.addAttribute("nf", new Nf());
 		return "nfform";
 	}

@@ -38,7 +38,7 @@ public class TruckController {
 	}
 
 	@RequestMapping("truck/new")
-	public String newProduct(final Model model) {
+	public String newTruck(final Model model) {
 		model.addAttribute("truck", new Truck());
 		return "truckform";
 	}
