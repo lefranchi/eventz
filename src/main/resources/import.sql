@@ -125,6 +125,10 @@ INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (2, 4
 INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`properties_key`) VALUES (4, '3', 1);
 ------------------------------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------------------------------
+-- Usuarios
+------------------------------------------------------------------------------------------------------------
+INSERT INTO `eventz`.`user`(`email`,`password_hash`,`role`) VALUES ('admin@mail.com', '$2a$10$Os7HrMIxwCjYpwodmE9nk.R7e.8yGmo/6VnG2aP8QRgWCqqCFWIgG', 'ADMIN');
 
 ------------------------------------------------------------------------------------------------------------
 -- Caminhões
