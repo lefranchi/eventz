@@ -1,13 +1,18 @@
 package br.com.lefranchi.eventz.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +32,12 @@ public class NfController {
 	@Autowired
 	TruckRepository truckRepository;
 
+	@InitBinder
+	protected void initBinder(final WebDataBinder binder) {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	}
+
 	@ModelAttribute("allTrucks")
 	public List<Truck> populateTrucks() {
 		return (List<Truck>) truckRepository.findAll();
@@ -34,7 +45,7 @@ public class NfController {
 
 	@RequestMapping(value = "/nfs", method = RequestMethod.GET)
 	public String list(final Model model) {
-		model.addAttribute("nfs", nfRepository.findAll());
+		model.addAttribute("nfs", nfRepository.findAllByOrderByDataDesc());
 		return "nfs";
 	}
 

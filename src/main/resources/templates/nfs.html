@@ -28,18 +28,20 @@
             <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" th:if="${not #lists.isEmpty(nfs)}">
               <thead>
                 <tr>
-                  <th>N.NF</th>
-                  <th>N.Lote</th>
-                  <th>Volume(lts)</th>
-                  <th class="mdl-data-table__cell--non-numeric" style="width: 100%;">Caminhão / Placa</th>
-                  <th>Consultar</th>
-                  <th>Editar</th>
-                  <th>Excluir</th>
+                	<th>Data</th>
+                  	<th>N.NF</th>
+                  	<th>N.Lote</th>
+                  	<th>Volume(lts)</th>
+                  	<th class="mdl-data-table__cell--non-numeric" style="width: 100%;">Caminhão / Placa</th>
+                  	<th>Consultar</th>
+                  	<th>Editar</th>
+                  	<th>Excluir</th>
                 </tr>
               </thead>
               <tbody>
               
 				<tr th:each="nf : ${nfs}">
+					<td th:text="${#dates.format(nf.data, 'dd/MM/yyyy')}" />
                 	<td th:text="${nf.nf}" />
                   	<td th:text="${nf.lote}" />
                   	<td th:text="${nf.volume}" />

@@ -1,12 +1,15 @@
 package br.com.lefranchi.eventz.domain;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -15,6 +18,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.jpa.Consumed;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @NamedQuery(name = "listAllNotProcessed", query = "select n from Nf n where n.processed = 0")
@@ -29,6 +33,12 @@ public class Nf extends AbstractPersistable<Long> {
 	@ManyToOne
 	@JoinColumn(name = "truck_id")
 	private Truck truck;
+
+	@NotNull(message = "Data não pode estar vazia.")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/YYYY")
+	@Column(nullable = false)
+	private Date data;
 
 	@NotNull(message = "Lote não pode estar vazio.")
 	@Min(value = 1, message = "Lote não pode ser 0.")
@@ -96,6 +106,14 @@ public class Nf extends AbstractPersistable<Long> {
 	@Override
 	public void setId(final Long id) {
 		super.setId(id);
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(final Date data) {
+		this.data = data;
 	}
 
 	@Override
