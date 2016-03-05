@@ -1,15 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Eventz</title>
+<title>Eventz</title>
 
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
 </head>
 <body>
+	<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
-<div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-</div>
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Agrichem</span>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+
+      <!--/*/ <th:block th:include="fragments/menu"></th:block> /*/-->
+      
+      <main class="mdl-layout__content">
+          <div class="page-content">
+  			<h3 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h3>
+          </div>
+      </main>
+    </div>
+    <script src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+		
 </body>
 </html>
+
+
+
+

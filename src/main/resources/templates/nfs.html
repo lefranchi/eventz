@@ -2,40 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Eventz</title>
+<title>Eventz</title>
 
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
 </head>
 <body>
-<div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-    <div th:if="${not #lists.isEmpty(nfs)}">
-        <h2>NF List</h2>
-        <table class="table table-striped">
-            <tr>
-                <th>Caminhão</th>
-                <th>Lote</th>
-                <th>NF</th>
-                <th>Volume</th>
-                <th>Enviado</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-            <tr th:each="nf : ${nfs}">
-                <td th:text="${nf.truck.identification}">Caminhão</td>
-                <td th:text="${nf.lote}">Lote</td>
-                <td th:text="${nf.nf}">NF</td>
-                <td th:text="${nf.volume}">Volume</td>
-                <td th:text="${nf.processed}">Enviado</td>
-                <td><a th:href="${'/nf/' + nf.id}">View</a></td>
-                <td><a th:href="${'/nf/edit/' + nf.id}">Edit</a></td>
-                <td><a th:href="${'/nf/delete/' + nf.id}">Delete</a></td>
-            </tr>
-        </table>
+	<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Notas Fiscais</span>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+
+      <!--/*/ <th:block th:include="fragments/menu"></th:block> /*/-->
+      
+      <main class="mdl-layout__content">
+          <div class="page-content">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" th:href="@{/nf/new}">
+              Novo
+            </a>
+
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" th:if="${not #lists.isEmpty(nfs)}">
+              <thead>
+                <tr>
+                  <th>N.NF</th>
+                  <th>N.Lote</th>
+                  <th>Volume(lts)</th>
+                  <th class="mdl-data-table__cell--non-numeric" style="width: 100%;">Caminhão / Placa</th>
+                  <th>Consultar</th>
+                  <th>Editar</th>
+                  <th>Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+              
+				<tr th:each="nf : ${nfs}">
+                	<td th:text="${nf.nf}" />
+                  	<td th:text="${nf.lote}" />
+                  	<td th:text="${nf.volume}" />
+                  	<td th:text="${nf.truck.identificationPlate}" class="mdl-data-table__cell--non-numeric" />
+                  	<td><a th:href="${'/nf/' + nf.id}" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">search</i></a></td>
+                  	<td><a th:href="${'/nf/edit/' + nf.id}" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">find_replace</i></a></td>
+                  	<td><a th:href="${'/nf/delete/' + nf.id}" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">delete</i></a></td>
+            	</tr>              
+
+              </tbody>
+            </table>
+          </div>
+      </main>
     </div>
-</div>
-
+    <script src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+		
 </body>
 </html>
+
+
+
+

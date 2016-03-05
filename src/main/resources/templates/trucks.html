@@ -2,34 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Eventz</title>
+<title>Eventz</title>
 
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
 </head>
 <body>
-<div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-    <div th:if="${not #lists.isEmpty(trucks)}">
-        <h2>Truck List</h2>
-        <table class="table table-striped">
-            <tr>
-                <th>Identification</th>
-                <th>Placa</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-            <tr th:each="truck : ${trucks}">
-                <td th:text="${truck.identification}">Identificador</td>
-                <td th:text="${truck.plate}">Placa</td>
-                <td><a th:href="${'/truck/' + truck.id}">View</a></td>
-                <td><a th:href="${'/truck/edit/' + truck.id}">Edit</a></td>
-                <td><a th:href="${'/truck/delete/' + truck.id}">Delete</a></td>
-            </tr>
-        </table>
+	<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Caminhões</span>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+
+      <!--/*/ <th:block th:include="fragments/menu"></th:block> /*/-->
+      
+      <main class="mdl-layout__content">
+          <div class="page-content">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" th:href="@{/truck/new}">
+              Novo
+            </a>
+
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" th:if="${not #lists.isEmpty(trucks)}">
+              <thead>
+                <tr>
+                  <th class="mdl-data-table__cell--non-numeric" style="width: 100%;">Identificador</th>
+                  <th class="mdl-data-table__cell--non-numeric">Placa</th>
+                  <th>Consultar</th>
+                  <th>Editar</th>
+                  <th>Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+              
+				<tr th:each="truck : ${trucks}">
+                	<td th:text="${truck.identification}" class="mdl-data-table__cell--non-numeric" />
+                	<td th:text="${truck.plate}" />
+                	
+					<td><a class="mdl-button mdl-js-button mdl-button--icon" th:href="${'/truck/' + truck.id}"><i class="material-icons">search</i></a></td>
+	                <td><a class="mdl-button mdl-js-button mdl-button--icon" th:href="${'/truck/edit/' + truck.id}"><i class="material-icons">find_replace</i></a></td>
+	                <td><a class="mdl-button mdl-js-button mdl-button--icon" th:href="${'/truck/delete/' + truck.id}"><i class="material-icons">delete</i></a></td>
+                	
+            	</tr>              
+
+              </tbody>
+            </table>
+          </div>
+      </main>
     </div>
-</div>
-
+    <script src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+		
 </body>
 </html>
+
+
+
+

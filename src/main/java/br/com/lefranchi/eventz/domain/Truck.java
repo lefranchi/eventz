@@ -29,6 +29,10 @@ public class Truck extends AbstractPersistable<Long> {
 	@Column(unique = true)
 	private String plate;
 
+	public String getIdentificationPlate() {
+		return getIdentification() + " / " + getPlate();
+	}
+
 	public String getIdentification() {
 		return identification;
 	}
