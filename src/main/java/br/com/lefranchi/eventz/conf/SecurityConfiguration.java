@@ -15,7 +15,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests().antMatchers("/login").permitAll().anyRequest().fullyAuthenticated().and()
-				.formLogin().loginPage("/login").permitAll().and().logout().permitAll();
+				.formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll().and().logout().permitAll();
 
 		httpSecurity.csrf().disable();
 		httpSecurity.headers().frameOptions().disable();
