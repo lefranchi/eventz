@@ -132,7 +132,7 @@ INSERT INTO `eventz`.`rule`(`formula`,`name`,`type`,`producer`,`producer_group`)
 TODO: SETAR AS PROPERIEDADES 
 --  numeroChip: +5511981339858
 -- url: http://api.clickatell.com/http/sendmsg?user=ablebit&password=aGKDfdfdZfgHbO&api_id=3590727&
--- messageFormat= {lote|NUMBER|5}{nf|NUMBER|10}{volume|NUMBER|10}
+-- messageFormat= {lote|5|0}{nf|10|0}{volume|10|0}
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------

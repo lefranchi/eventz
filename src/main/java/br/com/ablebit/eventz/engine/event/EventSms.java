@@ -12,6 +12,7 @@ import br.com.ablebit.eventz.domain.EventProperty;
 import br.com.ablebit.eventz.domain.ProducerData;
 import br.com.ablebit.eventz.engine.RuleProcessorVO;
 import br.com.ablebit.eventz.util.EventUtils;
+import br.com.ablebit.eventz.util.PositionalUtils;
 
 /**
  * Envia SMS.
@@ -40,6 +41,10 @@ public class EventSms implements Processor {
 		final String url = EventUtils.getPropertyValue(eventProperties, "url");
 		final int numeroChip = Integer.valueOf(EventUtils.getPropertyValue(eventProperties, "numeroChip"));
 		final String messageFormat = EventUtils.getPropertyValue(eventProperties, "messageFormat");
+
+		final String text = PositionalUtils.format(messageFormat, data.getDataValues());
+
+		LOGGER.info(String.format("Enviando mensagem %s por SMS para %s", text, String.valueOf(numeroChip)));
 
 	}
 
