@@ -15,8 +15,9 @@ INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('Alarm', 'eventAlarm'
 INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'alarmLevel','ALARM_LEVEL',3);
 
 INSERT INTO `eventz`.`event` (`name`, `processor`) VALUES ('SMS', 'eventSms');
-INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'numeroChip','NR_CHIP',4);
-INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'formatoMensagem','MESSAGE_FORMAT',4);
+INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'numeroChip','NUMBER',4);
+INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'url','STRING',4);
+INSERT INTO `eventz`.`event_property`(`mandatory`,`name`,`type`,`event`) VALUES (1,'messageFormat','STRING',4);
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
@@ -123,6 +124,15 @@ INSERT INTO `eventz`.`rule`(`formula`,`name`,`type`,`producer`,`producer_group`)
 INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (3);
 INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (2, 4);
 INSERT INTO `eventz`.`event_to_process_properties`(`event_to_process`,`value`,`properties_key`) VALUES (4, '3', 1);
+
+--Setar propriedades para envio de SMS sempre.
+INSERT INTO `eventz`.`rule`(`formula`,`name`,`type`,`producer`,`producer_group`) VALUES ('1 = 1','SMS - Propriedades de Envio','JEXL',NULL,2);
+-- INSERT INTO `eventz`.`event_to_process`(`event`) VALUES (3);
+-- INSERT INTO `eventz`.`rule_events_on_true`(`rule`,`events_on_true`) VALUES (3, 6);
+TODO: SETAR AS PROPERIEDADES 
+--  numeroChip: +5511981339858
+-- url: http://api.clickatell.com/http/sendmsg?user=ablebit&password=aGKDfdfdZfgHbO&api_id=3590727&
+-- messageFormat= {lote|NUMBER|5}{nf|NUMBER|10}{volume|NUMBER|10}
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
