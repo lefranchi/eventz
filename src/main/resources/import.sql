@@ -99,7 +99,7 @@ INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_meth
 INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('C3', 1, 1, 'C2');
 
 -- Notas Fiscais
-INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('NFs', 2, 2, 'br.com.lefranchi.eventz.domain.Nf');
+INSERT INTO `eventz`.`producer`(`name`, `metadata`,`producer_group`, `input_method_command`) VALUES ('NFs', 2, 2, 'br.com.ablebit.eventz.domain.Nf');
 ------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------
